@@ -15,13 +15,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package auth_azureb2c
- * @author Gopal Sharma <gopalsharma66@gmail.com>
+ * @package auth_azureb2cfix
+ * @author Gopal Sharma <gopalsharma66@gmail.com>, Richard Kirby <rbk@capdm.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>
+ * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>, 2025 Richard Kirby <rbk@capdm.com>
  */
 
-$string['pluginname'] = 'Azure AD B2C Connect';
+// RBK Small addition to pluginname to differentiate.
+$string['pluginname'] = 'Azure AD B2C Connect (CAPDM Fix)';
 $string['auth_azureb2cdescription'] = 'The Azure AD B2C Connect plugin provides single-sign-on functionality using Azure Active Directory (Azure AD) B2C identity providers.';
 
 $string['cfg_authendpoint_key'] = 'Authorization endpoint';

@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package auth_azureb2c
- * @author Gopal Sharma <gopalsharma66@gmail.com>
+ * @package auth_azureb2cfix
+ * @author Gopal Sharma <gopalsharma66@gmail.com>, Richard Kirby <rbk@capdm.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>
+ * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>, 2025 Richard Kirby <rbk@capdm.com>
  */
 
 namespace auth_azureb2c\loginflow;
@@ -184,9 +184,9 @@ class authcode extends \auth_azureb2c\loginflow\base {
                 $url = get_config('auth_azureb2c', 'resetpassendpoint')."&client_id=". get_config('auth_azureb2c', 'clientid')."&nonce=defaultNonce&redirect_uri=". $CFG->wwwroot."/auth/azureb2c/&scope=openid&response_type=code&prompt=login&ui_locales=$lang";
                 redirect($url);
             } else if (strstr($authparams['error_description'], 'AADB2C90075')) {
-            // RBK Session timeout issue on SSO side?
-            // Bounce back to main page???
-            redirect(new \moodle_url('/'));
+                // RBK Session timeout issue on SSO side?
+                // Bounce back to main page???
+                redirect(new \moodle_url('/'));
             
             } else {
                 \auth_azureb2c\utils::debug('Authorization error.', 'authcode::handleauthresponse', $authparams);
@@ -505,19 +505,19 @@ class authcode extends \auth_azureb2c\loginflow\base {
                 if (empty($CFG->authpreventaccountcreation)) {
                     if (!$CFG->allowaccountssameemail) {
                         $info = $this->get_userinfo($username);
-            // RBK See if an existing record exists with the same
-            // email, and use that instead
-            $count = $DB->count_records('user', array('email' => $info['email'], 'deleted' => 0));
-            if ($count == 0) { // No existing user with same email
-                $user = create_user_record($username, null, 'azureb2c');
-            } else if ($count == 1) { // Exactly one
-                $user = $DB->get_record('user', array('email' => $info['email']));
-                debugging('Updating user ' . $user->id . ' with old username ' . $user->username . ' to ' . $username);
-                $user->username = $username;
-                $user->auth = 'azureb2c';
-                $DB->update_record('user', $user);
-            } else { // Multiple users with same email - not good!
-                        // Trigger login failed event.
+                        // RBK See if an existing record exists with the same
+                        // email, and use that instead
+                        $count = $DB->count_records('user', array('email' => $info['email'], 'deleted' => 0));
+                        if ($count == 0) { // No existing user with same email
+                            $user = create_user_record($username, null, 'azureb2c');
+                        } else if ($count == 1) { // Exactly one
+                            $user = $DB->get_record('user', array('email' => $info['email']));
+                            debugging('Updating user ' . $user->id . ' with old username ' . $user->username . ' to ' . $username);
+                            $user->username = $username;
+                            $user->auth = 'azureb2c';
+                            $DB->update_record('user', $user);
+                        } else { // Multiple users with same email - not good!
+                            // Trigger login failed event.
                             $failurereason = AUTH_LOGIN_FAILED;
                             $eventdata = ['other' => ['username' => $username, 'reason' => $failurereason]];
                             $event = \core\event\user_login_failed::create($eventdata);
@@ -526,7 +526,7 @@ class authcode extends \auth_azureb2c\loginflow\base {
                         }
                     } else {
                         $user = create_user_record($username, null, 'azureb2c');
-                }
+                    }
                 } else {
                     // Trigger login failed event.
                     $failurereason = AUTH_LOGIN_NOUSER;

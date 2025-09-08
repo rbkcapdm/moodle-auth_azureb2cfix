@@ -15,16 +15,16 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package auth_azureb2c
- * @author Gopal Sharma <gopalsharma66@gmail.com>
+ * @package auth_azureb2cfix
+ * @author Gopal Sharma <gopalsharma66@gmail.com>, Richard Kirby <rbk@capdm.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>
+ * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>, 2025 Richard KIrby <rbk@capdm.com>
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2023030700;  // The current plugin version (Date: YYYYMMDDXX).
+$plugin->version = 2025090800;  // The current plugin version (Date: YYYYMMDDXX).
 $plugin->requires = 2018051700;
-$plugin->release = '4.1.0';
-$plugin->component = 'auth_azureb2c';
+$plugin->release = '4.1.0.1';
+$plugin->component = 'auth_azureb2cfix';
 $plugin->maturity = MATURITY_STABLE;
