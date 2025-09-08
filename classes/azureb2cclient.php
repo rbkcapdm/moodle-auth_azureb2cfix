@@ -21,13 +21,13 @@
  * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>, 2025 Richard Kirby <rbk@capdm.com>
  */
 
-namespace auth_azureb2c;
+namespace auth_azureb2cfix;
 
 /**
  * Azure AD B2C Connect Client
  */
-class azureb2cclient {
-    /** @var \auth_azureb2c\httpclientinterface An HTTP client to use. */
+class azureb2cfixclient {
+    /** @var \auth_azureb2cfix\httpclientinterface An HTTP client to use. */
     protected $httpclient;
 
     /** @var string The client ID. */
@@ -49,9 +49,9 @@ class azureb2cclient {
     /**
      * Constructor.
      *
-     * @param \auth_azureb2c\httpclientinterface $httpclient An HTTP client to use for background communication.
+     * @param \auth_azureb2cfix\httpclientinterface $httpclient An HTTP client to use for background communication.
      */
-    public function __construct(\auth_azureb2c\httpclientinterface $httpclient) {
+    public function __construct(\auth_azureb2cfix\httpclientinterface $httpclient) {
         $this->httpclient = $httpclient;
     }
 
@@ -106,14 +106,14 @@ class azureb2cclient {
     }
 
     /**
-     * Set azureb2c endpoints.
+     * Set azureb2cfix endpoints.
      *
      * @param array $endpoints Array of endpoints. Can have keys 'auth', and 'token'.
      */
     public function setendpoints($endpoints) {
         foreach ($endpoints as $type => $uri) {
             if (clean_param($uri, PARAM_URL) !== $uri) {
-                throw new \moodle_exception('errorazureb2cclientinvalidendpoint', 'auth_azureb2c');
+                throw new \moodle_exception('errorazureb2cfixclientinvalidendpoint', 'auth_azureb2c');
             }
             $this->endpoints[$type] = $uri;
         }
@@ -128,14 +128,14 @@ class azureb2cclient {
      *
      * @param bool $promptlogin Whether to prompt for login or use existing session.
      * @param array $stateparams Parameters to store as state.
-     * @param array $extraparams Additional parameters to send with the azureb2c request.
+     * @param array $extraparams Additional parameters to send with the azureb2cfix request.
      * @return array Array of request parameters.
      */
     protected function getauthrequestparams($promptlogin = false, array $stateparams = array(), array $extraparams = array()) {
         $nonce = 'N'.uniqid(); 
         $lang = current_language();
         $params = [
-            'scope' => get_config('auth_azureb2c', 'scope'),// Get the custom scope from settings
+            'scope' => get_config('auth_azureb2cfix', 'scope'),// Get the custom scope from settings
             'client_id' => $this->clientid,
             'nonce' =>  $nonce,
             'response_mode' => 'form_post',
@@ -149,7 +149,7 @@ class azureb2cclient {
             $params['prompt'] = 'login';
         }
 
-        $domainhint = get_config('auth_azureb2c', 'domainhint');
+        $domainhint = get_config('auth_azureb2cfix', 'domainhint');
         if (!empty($domainhint)) {
             $params['domain_hint'] = $domainhint;
         }
@@ -172,7 +172,7 @@ class azureb2cclient {
         $staterec->nonce = $nonce;
         $staterec->timecreated = time();
         $staterec->additionaldata = serialize($stateparams);
-        $DB->insert_record('auth_azureb2c_state', $staterec);
+        $DB->insert_record('auth_azureb2cfix_state', $staterec);
         return $staterec->state;
     }
 
@@ -181,16 +181,16 @@ class azureb2cclient {
      *
      * @param bool $promptlogin Whether to prompt for login or use existing session.
      * @param array $stateparams Parameters to store as state.
-     * @param array $extraparams Additional parameters to send with the azureb2c request.
+     * @param array $extraparams Additional parameters to send with the azureb2cfix request.
      */
     public function authrequest($promptlogin = false, array $stateparams = array(), array $extraparams = array()) {
         global $DB;
         if (empty($this->clientid)) {
-            throw new \moodle_exception('errorazureb2cclientnocreds', 'auth_azureb2c');
+            throw new \moodle_exception('errorazureb2cfixclientnocreds', 'auth_azureb2c');
         }
 
         if (empty($this->endpoints['auth'])) {
-            throw new \moodle_exception('errorazureb2cclientnoauthendpoint', 'auth_azureb2c');
+            throw new \moodle_exception('errorazureb2cfixclientnoauthendpoint', 'auth_azureb2c');
         }
 
         $params = $this->getauthrequestparams($promptlogin, $stateparams, $extraparams);
@@ -207,15 +207,15 @@ class azureb2cclient {
      */
     public function rocredsrequest($username, $password) {
         if (empty($this->endpoints['token'])) {
-            throw new \moodle_exception('errorazureb2cclientnotokenendpoint', 'auth_azureb2c');
+            throw new \moodle_exception('errorazureb2cfixclientnotokenendpoint', 'auth_azureb2c');
         }
 
         if (strpos($this->endpoints['token'], 'https://') !== 0) {
-            throw new \moodle_exception('errorazureb2cclientinsecuretokenendpoint', 'auth_azureb2c');
+            throw new \moodle_exception('errorazureb2cfixclientinsecuretokenendpoint', 'auth_azureb2c');
         }
 
         $params = [
-            'scope' => get_config('auth_azureb2c', 'scope'),
+            'scope' => get_config('auth_azureb2cfix', 'scope'),
             'grant_type' => 'password',
             'username' => $username,
             'password' => $password,
@@ -226,9 +226,9 @@ class azureb2cclient {
 
         try {
             $returned = $this->httpclient->post($this->endpoints['token'], $params);
-            return \auth_azureb2c\utils::process_json_response($returned, ['token_type' => null, 'id_token' => null]);
+            return \auth_azureb2cfix\utils::process_json_response($returned, ['token_type' => null, 'id_token' => null]);
         } catch (\Exception $e) {
-            \auth_azureb2c\utils::debug('Error in rocredsrequest request', 'azureb2cclient::rocredsrequest', $e->getMessage());
+            \auth_azureb2cfix\utils::debug('Error in rocredsrequest request', 'azureb2cclient::rocredsrequest', $e->getMessage());
             return false;
         }
     }
@@ -242,12 +242,12 @@ class azureb2cclient {
      */
     public function tokenrequest($code) {
         if (empty($this->endpoints['token'])) {
-            throw new \moodle_exception('errorazureb2cclientnotokenendpoint', 'auth_azureb2c');
+            throw new \moodle_exception('errorazureb2cfixclientnotokenendpoint', 'auth_azureb2c');
         }
 
         
         $params = [
-            'scope' => get_config('auth_azureb2c', 'scope'),
+            'scope' => get_config('auth_azureb2cfix', 'scope'),
             'client_id' => $this->clientid,
             'client_secret' => $this->clientsecret,
             'grant_type' => 'authorization_code',
@@ -257,6 +257,6 @@ class azureb2cclient {
 
         $returned = $this->httpclient->post($this->endpoints['token'], $params);
 
-        return \auth_azureb2c\utils::process_json_response($returned, ['id_token' => null]);
+        return \auth_azureb2cfix\utils::process_json_response($returned, ['id_token' => null]);
     }
 }

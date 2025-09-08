@@ -15,19 +15,19 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package auth_azureb2c
+ * @package auth_azureb2cfix
  * @author Gopal Sharma <gopalsharma66@gmail.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>
  */
 
-namespace auth_azureb2c\tests;
+namespace auth_azureb2cfix\tests;
 
 /**
- * A mock azureb2cclient class providing access to all inaccessible properties/methods.
+ * A mock azureb2cfixclient class providing access to all inaccessible properties/methods.
  */
-class mockazureb2cclient extends \auth_azureb2c\azureb2cclient {
-    /** @var \auth_azureb2c\httpclientinterface An HTTP client to use. */
+class mockazureb2cfixclient extends \auth_azureb2c\azureb2cclient {
+    /** @var \auth_azureb2cfix\httpclientinterface An HTTP client to use. */
     public $httpclient;
 
     /** @var array Array of endpoints. */
@@ -45,7 +45,7 @@ class mockazureb2cclient extends \auth_azureb2c\azureb2cclient {
      *
      * @param bool $promptlogin Whether to prompt for login or use existing session.
      * @param array $stateparams Parameters to store as state.
-     * @param array $extraparams Additional parameters to send with the azureb2c request.
+     * @param array $extraparams Additional parameters to send with the azureb2cfix request.
      * @return array Array of request parameters.
      */
     public function getauthrequestparams($promptlogin = false, array $stateparams = array(), array $extraparams = array()) {

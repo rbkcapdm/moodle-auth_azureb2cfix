@@ -15,20 +15,20 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package auth_azureb2c
+ * @package auth_azureb2cfix
  * @author Gopal Sharma <gopalsharma66@gmail.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>
  */
 
-namespace auth_azureb2c;
+namespace auth_azureb2cfix;
 
 require_once($CFG->dirroot.'/lib/filelib.php');
 
 /**
- * Implementation of \auth_azureb2c\httpclientinterface using Moodle CURL.
+ * Implementation of \auth_azureb2cfix\httpclientinterface using Moodle CURL.
  */
-class httpclient extends \curl implements \auth_azureb2c\httpclientinterface {
+class httpclient extends \curl implements \auth_azureb2cfix\httpclientinterface {
     /**
      * Generate a client tag.
      *
@@ -60,7 +60,7 @@ class httpclient extends \curl implements \auth_azureb2c\httpclientinterface {
     protected function get_plugin_version() {
         global $CFG;
         $plugin = new \stdClass;
-        require_once($CFG->dirroot.'/auth/azureb2c/version.php');
+        require_once($CFG->dirroot.'/auth/azureb2cfix/version.php');
         return (isset($plugin->release)) ? $plugin->release : 'unknown';
     }
 

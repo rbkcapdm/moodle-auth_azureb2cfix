@@ -15,13 +15,13 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package auth_azureb2c
+ * @package auth_azureb2cfix
  * @author Gopal Sharma <gopalsharma66@gmail.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>
  */
 
-namespace auth_azureb2c\event;
+namespace auth_azureb2cfix\event;
 
 /**
  * Event fired whenever we need to record a debug message.
@@ -33,7 +33,7 @@ class action_failed extends \core\event\base {
      * @return string
      */
     public static function get_name() {
-        return get_string('event_debug', 'auth_azureb2c');
+        return get_string('event_debug', 'auth_azureb2cfix');
     }
 
     /**
@@ -51,7 +51,7 @@ class action_failed extends \core\event\base {
      * @return array
      */
     protected function get_legacy_logdata() {
-        return array(SITEID, 'auth_azureb2c', 'error', 'index.php');
+        return array(SITEID, 'auth_azureb2cfix', 'error', 'index.php');
     }
 
     /**

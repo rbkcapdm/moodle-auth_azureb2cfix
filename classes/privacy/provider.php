@@ -15,13 +15,13 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package auth_azureb2c
+ * @package auth_azureb2cfix
  * @author Gopal Sharma <gopalsharma66@gmail.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>
  */
 
-namespace auth_azureb2c\privacy;
+namespace auth_azureb2cfix\privacy;
 
 use \core_privacy\local\metadata\collection;
 use \core_privacy\local\request\contextlist;
@@ -29,15 +29,15 @@ use \core_privacy\local\request\approved_contextlist;
 use \core_privacy\local\request\writer;
 
 if (interface_exists('\core_privacy\local\request\core_userlist_provider')) {
-    interface auth_azureb2c_userlist extends \core_privacy\local\request\core_userlist_provider {}
+    interface auth_azureb2cfix_userlist extends \core_privacy\local\request\core_userlist_provider {}
 } else {
-    interface auth_azureb2c_userlist {};
+    interface auth_azureb2cfix_userlist {};
 }
 
 class provider implements
     \core_privacy\local\request\plugin\provider,
     \core_privacy\local\metadata\provider,
-    auth_azureb2c_userlist {
+    auth_azureb2cfix_userlist {
 
     /**
      * Returns meta data about this system.
@@ -48,16 +48,16 @@ class provider implements
     public static function get_metadata(collection $collection): collection {
 
         $tables = [
-            'auth_azureb2c_prevlogin' => [
+            'auth_azureb2cfix_prevlogin' => [
                 'userid',
                 'method',
                 'password',
             ],
-            'auth_azureb2c_token' => [
-                'azureb2cuniqid',
+            'auth_azureb2cfix_token' => [
+                'azureb2cfixuniqid',
                 'username',
                 'userid',
-                'azureb2cusername',
+                'azureb2cfixusername',
                 'scope',
                 'resource',
                 'authcode',
@@ -93,14 +93,14 @@ class provider implements
         $contextlist = new \core_privacy\local\request\contextlist();
 
         $sql = "SELECT ctx.id
-                  FROM {auth_azureb2c_token} tk
+                  FROM {auth_azureb2cfix_token} tk
                   JOIN {context} ctx ON ctx.instanceid = tk.userid AND ctx.contextlevel = :contextlevel
                  WHERE tk.userid = :userid";
         $params = ['userid' => $userid, 'contextlevel' => CONTEXT_USER];
         $contextlist->add_from_sql($sql, $params);
 
         $sql = "SELECT ctx.id
-                  FROM {auth_azureb2c_prevlogin} pv
+                  FROM {auth_azureb2cfix_prevlogin} pv
                   JOIN {context} ctx ON ctx.instanceid = pv.userid AND ctx.contextlevel = :contextlevel
                  WHERE pv.userid = :userid";
         $params = ['userid' => $userid, 'contextlevel' => CONTEXT_USER];
@@ -127,7 +127,7 @@ class provider implements
         ];
 
         $sql = "SELECT ctx.instanceid as userid
-                  FROM {auth_azureb2c_prevlogin} pl
+                  FROM {auth_azureb2cfix_prevlogin} pl
                   JOIN {context} ctx
                        ON ctx.instanceid = pl.userid
                        AND ctx.contextlevel = :contextuser
@@ -135,7 +135,7 @@ class provider implements
         $userlist->add_from_sql('userid', $sql, $params);
 
         $sql = "SELECT ctx.instanceid as userid
-                  FROM {auth_azureb2c_token} tk
+                  FROM {auth_azureb2cfix_token} tk
                   JOIN {context} ctx
                        ON ctx.instanceid = tk.userid
                        AND ctx.contextlevel = :contextuser
@@ -157,8 +157,8 @@ class provider implements
             $records = $DB->get_recordset($table, $filterparams);
             foreach ($records as $record) {
                 writer::with_context($context)->export_data([
-                    get_string('privacy:metadata:auth_azureb2c', 'auth_azureb2c'),
-                    get_string('privacy:metadata:'.$table, 'auth_azureb2c')
+                    get_string('privacy:metadata:auth_azureb2cfix', 'auth_azureb2c'),
+                    get_string('privacy:metadata:'.$table, 'auth_azureb2cfix')
                 ], $record);
             }
         }
@@ -172,8 +172,8 @@ class provider implements
      */
     protected static function get_table_user_map(\stdClass $user): array {
         $tables = [
-            'auth_azureb2c_prevlogin' => ['userid' => $user->id],
-            'auth_azureb2c_token' => ['userid' => $user->id],
+            'auth_azureb2cfix_prevlogin' => ['userid' => $user->id],
+            'auth_azureb2cfix_token' => ['userid' => $user->id],
         ];
         return $tables;
     }
@@ -212,8 +212,8 @@ class provider implements
      */
     private static function delete_user_data(int $userid) {
         global $DB;
-        $DB->delete_records('auth_azureb2c_prevlogin', ['userid' => $userid]);
-        $DB->delete_records('auth_azureb2c_token', ['userid' => $userid]);
+        $DB->delete_records('auth_azureb2cfix_prevlogin', ['userid' => $userid]);
+        $DB->delete_records('auth_azureb2cfix_token', ['userid' => $userid]);
     }
 
     /**

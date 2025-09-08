@@ -15,13 +15,13 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package auth_azureb2c
+ * @package auth_azureb2cfix
  * @author Gopal Sharma <gopalsharma66@gmail.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>
  */
 
-namespace auth_azureb2c\form\adminsetting;
+namespace auth_azureb2cfix\form\adminsetting;
 
 /**
  * Displays the redirect URI for easier config.
@@ -80,8 +80,8 @@ class loginflow extends \admin_setting {
             if ($data === $flowtype || (empty($data) && $flowtype === $this->get_defaultsetting())) {
                 $radioattrs['checked'] = 'checked';
             }
-            $typename = get_string('cfg_loginflow_'.$flowtype, 'auth_azureb2c');
-            $typedesc = get_string('cfg_loginflow_'.$flowtype.'_desc', 'auth_azureb2c');
+            $typename = get_string('cfg_loginflow_'.$flowtype, 'auth_azureb2cfix');
+            $typedesc = get_string('cfg_loginflow_'.$flowtype.'_desc', 'auth_azureb2cfix');
             $html .= \html_writer::empty_tag('input', $radioattrs);
             $html .= \html_writer::label($typename, $flowtypeid, false);
             $html .= '<br />';

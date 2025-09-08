@@ -15,21 +15,21 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package auth_azureb2c
+ * @package auth_azureb2cfix
  * @author Gopal Sharma <gopalsharma66@gmail.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>
  */
 
-namespace auth_azureb2c\loginflow;
+namespace auth_azureb2cfix\loginflow;
 
 /**
  * Login flow for the oauth2 resource owner credentials grant.
  */
-class rocreds extends \auth_azureb2c\loginflow\base {
+class rocreds extends \auth_azureb2cfix\loginflow\base {
     /**
      * Check for an existing user object.
-     * @param string $azureb2cuniqid The user object ID to look up.
+     * @param string $azureb2cfixuniqid The user object ID to look up.
      * @param string $username The original username.
      * @return string If there is an existing user object, return the username associated with it.
      *                If there is no existing user object, return the original username.
@@ -67,7 +67,7 @@ class rocreds extends \auth_azureb2c\loginflow\base {
 
         $username = $frm->username;
         $password = $frm->password;
-        $auth = 'azureb2c';
+        $auth = 'azureb2cfix';
 
         $username = $this->check_objects($username);
         if ($username !== $frm->username) {
@@ -81,7 +81,7 @@ class rocreds extends \auth_azureb2c\loginflow\base {
             }
         }
 
-        $autoappend = get_config('auth_azureb2c', 'autoappend');
+        $autoappend = get_config('auth_azureb2cfix', 'autoappend');
         if (empty($autoappend)) {
             // If we're not doing autoappend, just let things flow naturally.
             return true;
@@ -134,36 +134,36 @@ class rocreds extends \auth_azureb2c\loginflow\base {
     public function user_login($username, $password = null) {
         global $CFG, $DB;
 
-        $client = $this->get_azureb2cclient();
+        $client = $this->get_azureb2cfixclient();
         $authparams = ['code' => ''];
 
-        $azureb2cusername = $username;
-        $azureb2ctoken = $DB->get_records('auth_azureb2c_token', ['username' => $username]);
-        if (!empty($azureb2ctoken)) {
-            $azureb2ctoken = array_shift($azureb2ctoken);
-            if (!empty($azureb2ctoken) && !empty($azureb2ctoken->azureb2cusername)) {
-                $azureb2cusername = $azureb2ctoken->azureb2cusername;
+        $azureb2cfixusername = $username;
+        $azureb2cfixtoken = $DB->get_records('auth_azureb2c_token', ['username' => $username]);
+        if (!empty($azureb2cfixtoken)) {
+            $azureb2cfixtoken = array_shift($azureb2ctoken);
+            if (!empty($azureb2cfixtoken) && !empty($azureb2ctoken->azureb2cusername)) {
+                $azureb2cfixusername = $azureb2ctoken->azureb2cusername;
             }
         }
 
         // Make request.
-        $tokenparams = $client->rocredsrequest($azureb2cusername, $password);
+        $tokenparams = $client->rocredsrequest($azureb2cfixusername, $password);
         if (!empty($tokenparams) && isset($tokenparams['token_type']) && $tokenparams['token_type'] === 'Bearer') {
-            list($azureb2cuniqid, $idtoken) = $this->process_idtoken($tokenparams['id_token']);
+            list($azureb2cfixuniqid, $idtoken) = $this->process_idtoken($tokenparams['id_token']);
 
             // Check restrictions.
             $passed = $this->checkrestrictions($idtoken);
             if ($passed !== true) {
                 $errstr = 'User prevented from logging in due to restrictions.';
-                \auth_azureb2c\utils::debug($errstr, 'handleauthresponse', $idtoken);
+                \auth_azureb2cfix\utils::debug($errstr, 'handleauthresponse', $idtoken);
                 return false;
             }
 
-            $tokenrec = $DB->get_record('auth_azureb2c_token', ['azureb2cuniqid' => $azureb2cuniqid]);
+            $tokenrec = $DB->get_record('auth_azureb2cfix_token', ['azureb2cuniqid' => $azureb2cuniqid]);
             if (!empty($tokenrec)) {
                 $this->updatetoken($tokenrec->id, $authparams, $tokenparams);
             } else {
-                $tokenrec = $this->createtoken($azureb2cuniqid, $username, $authparams, $tokenparams, $idtoken);
+                $tokenrec = $this->createtoken($azureb2cfixuniqid, $username, $authparams, $tokenparams, $idtoken);
             }
             return true;
         }

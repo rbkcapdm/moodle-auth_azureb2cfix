@@ -23,7 +23,7 @@
 
 // RBK Small addition to pluginname to differentiate.
 $string['pluginname'] = 'Azure AD B2C Connect (CAPDM Fix)';
-$string['auth_azureb2cdescription'] = 'The Azure AD B2C Connect plugin provides single-sign-on functionality using Azure Active Directory (Azure AD) B2C identity providers.';
+$string['auth_azureb2cfixdescription'] = 'The Azure AD B2C Connect plugin provides single-sign-on functionality using Azure Active Directory (Azure AD) B2C identity providers.';
 
 $string['cfg_authendpoint_key'] = 'Authorization endpoint';
 $string['cfg_authendpoint_desc'] = 'The URI of the authorization endpoint from your identity provider to use.';
@@ -75,8 +75,8 @@ $string['cfg_loginflow_authcode'] = 'Authorization code flow (recommended)';
 $string['cfg_loginflow_authcode_desc'] = 'Using this flow, the user clicks the name of the identity provider (See "Provider Name" above) on the Moodle login page and is redirected to the provider to log in. Once successfully logged in, the user is redirected back to Moodle where the Moodle login takes place transparently. This is the most standardized, secure way for the user log in.';
 $string['cfg_loginflow_rocreds'] = 'Resource owner password credentials grant';
 $string['cfg_loginflow_rocreds_desc'] = 'Using this flow, the user enters their username and password into the Moodle login form like they would with a manual login. This will authorize the user with the identity provider, but will not create a session on the identity provider\'s site. For example, if using Azure AD B2C with Azure AD B2C Connect, the user will be logged in to Moodle but not the Azure AD B2C web applications. Using the authorization request is recommended if you want users to be logged in to both Moodle and the identity provider.  Note that not all identity providers support this flow. This option should only be used when other authorization grant types are not available.';
-$string['cfg_azureb2cresource_key'] = 'Resource';
-$string['cfg_azureb2cresource_desc'] = 'The Azure AD B2C Connect resource for which to send the request.';
+$string['cfg_azureb2cfixresource_key'] = 'Resource';
+$string['cfg_azureb2cfixresource_desc'] = 'The Azure AD B2C Connect resource for which to send the request.';
 $string['cfg_opname_key'] = 'Provider name';
 $string['cfg_opname_desc'] = 'This is an end-user-facing label that identifies the type of credentials the user must use to login. This label is used throughout the user-facing portions of this plugin to identify your provider.';
 $string['cfg_redirecturi_key'] = 'Redirect URI';
@@ -114,17 +114,17 @@ $string['errorjwtinvalidheader'] = 'Invalid JWT header';
 $string['errorjwtmalformed'] = 'Malformed JWT received.';
 $string['errorjwtunsupportedalg'] = 'JWS Alg or JWE not supported';
 $string['errorlogintoconnectedaccount'] = 'This Azure AD B2C user is connected to a Moodle account, but Azure AD B2C Connect login is not enabled for this Moodle account. Please log in to the Moodle account using the account\'s defined authentication method to use Azure AD B2C features';
-$string['errorazureb2cnotenabled'] = 'The Azure AD B2C Connect authentication plugin is not enabled.';
+$string['errorazureb2cfixnotenabled'] = 'The Azure AD B2C Connect authentication plugin is not enabled.';
 $string['errornodisconnectionauthmethod'] = 'Cannot disconnect because there is no enabled authentication plugin to fall back to. (either user\'s previous login method or the manual login method).';
-$string['errorazureb2cclientinvalidendpoint'] = 'Invalid Endpoint URI received.';
-$string['errorazureb2cclientnocreds'] = 'Please set client credentials with setcreds';
-$string['errorazureb2cclientnoauthendpoint'] = 'No authorization endpoint set. Please set with $this->setendpoints';
-$string['errorazureb2cclientnotokenendpoint'] = 'No token endpoint set. Please set with $this->setendpoints';
-$string['errorazureb2cclientinsecuretokenendpoint'] = 'The token endpoint must be using SSL/TLS for this.';
+$string['errorazureb2cfixclientinvalidendpoint'] = 'Invalid Endpoint URI received.';
+$string['errorazureb2cfixclientnocreds'] = 'Please set client credentials with setcreds';
+$string['errorazureb2cfixclientnoauthendpoint'] = 'No authorization endpoint set. Please set with $this->setendpoints';
+$string['errorazureb2cfixclientnotokenendpoint'] = 'No token endpoint set. Please set with $this->setendpoints';
+$string['errorazureb2cfixclientinsecuretokenendpoint'] = 'The token endpoint must be using SSL/TLS for this.';
 $string['errorrestricted'] = 'This site has restrictions in place on the users that can log in with Azure AD B2C Connect. These restrictions currently prevent you from completing this login attempt.';
 $string['errorucpinvalidaction'] = 'Invalid action received.';
-$string['errorazureb2ccall'] = 'Error in Azure AD B2C Connect. Please check logs for more information.';
-$string['errorazureb2ccall_message'] = 'Error in Azure AD B2C Connect: {$a}';
+$string['errorazureb2cfixcall'] = 'Error in Azure AD B2C Connect. Please check logs for more information.';
+$string['errorazureb2cfixcall_message'] = 'Error in Azure AD B2C Connect: {$a}';
 $string['errorinvalidredirect_message'] = 'The URL you are trying to redirect to does not exist.';
 
 $string['eventuserauthed'] = 'User authorized with Azure AD B2C Connect';
@@ -133,27 +133,27 @@ $string['eventuserconnected'] = 'User connected to Azure AD B2C Connect';
 $string['eventuserloggedin'] = 'User logged in with Azure AD B2C Connect';
 $string['eventuserdisconnected'] = 'User disconnected from Azure AD B2C Connect';
 
-$string['azureb2c:manageconnection'] = 'Allow Azure AD B2C Connection and Disconnection';
-$string['azureb2c:manageconnectionconnect'] = 'Allow Azure AD B2C Connection';
-$string['azureb2c:manageconnectiondisconnect'] = 'Allow Azure AD B2C Disconnection';
+$string['azureb2cfix:manageconnection'] = 'Allow Azure AD B2C Connection and Disconnection';
+$string['azureb2cfix:manageconnectionconnect'] = 'Allow Azure AD B2C Connection';
+$string['azureb2cfix:manageconnectiondisconnect'] = 'Allow Azure AD B2C Disconnection';
 
-$string['privacy:metadata:auth_azureb2c'] = 'Azure AD B2C Connect Authentication';
-$string['privacy:metadata:auth_azureb2c_prevlogin'] = 'Previous login methods to undo Azure AD B2C connections';
-$string['privacy:metadata:auth_azureb2c_prevlogin:userid'] = 'The ID of the Moodle user';
-$string['privacy:metadata:auth_azureb2c_prevlogin:method'] = 'The previous login method';
-$string['privacy:metadata:auth_azureb2c_prevlogin:password'] = 'The previous (encrypted) user password field.';
-$string['privacy:metadata:auth_azureb2c_token'] = 'Azure AD B2C Connect tokens';
-$string['privacy:metadata:auth_azureb2c_token:azureb2cuniqid'] = 'The azureb2c unique user identifier.';
-$string['privacy:metadata:auth_azureb2c_token:username'] = 'The username of the Moodle user';
-$string['privacy:metadata:auth_azureb2c_token:userid'] = 'The user ID of the Moodle user';
-$string['privacy:metadata:auth_azureb2c_token:azureb2cusername'] = 'The username of the azureb2c user';
-$string['privacy:metadata:auth_azureb2c_token:scope'] = 'The scope of the token';
-$string['privacy:metadata:auth_azureb2c_token:resource'] = 'The resource of the token';
-$string['privacy:metadata:auth_azureb2c_token:authcode'] = 'The auth code for the token';
-$string['privacy:metadata:auth_azureb2c_token:token'] = 'The token';
-$string['privacy:metadata:auth_azureb2c_token:expiry'] = 'The token expiry';
-$string['privacy:metadata:auth_azureb2c_token:refreshtoken'] = 'The token refresh token';
-$string['privacy:metadata:auth_azureb2c_token:idtoken'] = 'The token id token';
+$string['privacy:metadata:auth_azureb2cfix'] = 'Azure AD B2C Connect Authentication';
+$string['privacy:metadata:auth_azureb2cfix_prevlogin'] = 'Previous login methods to undo Azure AD B2C connections';
+$string['privacy:metadata:auth_azureb2cfix_prevlogin:userid'] = 'The ID of the Moodle user';
+$string['privacy:metadata:auth_azureb2cfix_prevlogin:method'] = 'The previous login method';
+$string['privacy:metadata:auth_azureb2cfix_prevlogin:password'] = 'The previous (encrypted) user password field.';
+$string['privacy:metadata:auth_azureb2cfix_token'] = 'Azure AD B2C Connect tokens';
+$string['privacy:metadata:auth_azureb2cfix_token:azureb2cuniqid'] = 'The azureb2c unique user identifier.';
+$string['privacy:metadata:auth_azureb2cfix_token:username'] = 'The username of the Moodle user';
+$string['privacy:metadata:auth_azureb2cfix_token:userid'] = 'The user ID of the Moodle user';
+$string['privacy:metadata:auth_azureb2cfix_token:azureb2cusername'] = 'The username of the azureb2c user';
+$string['privacy:metadata:auth_azureb2cfix_token:scope'] = 'The scope of the token';
+$string['privacy:metadata:auth_azureb2cfix_token:resource'] = 'The resource of the token';
+$string['privacy:metadata:auth_azureb2cfix_token:authcode'] = 'The auth code for the token';
+$string['privacy:metadata:auth_azureb2cfix_token:token'] = 'The token';
+$string['privacy:metadata:auth_azureb2cfix_token:expiry'] = 'The token expiry';
+$string['privacy:metadata:auth_azureb2cfix_token:refreshtoken'] = 'The token refresh token';
+$string['privacy:metadata:auth_azureb2cfix_token:idtoken'] = 'The token id token';
 
 // In the following strings, $a refers to a customizable name for the identity manager. For example, this could be
 // "Azure AD B2C", "Azure AD B2C Connect", etc.

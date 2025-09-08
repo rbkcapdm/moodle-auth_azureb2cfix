@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package auth_azureb2c
+ * @package auth_azureb2cfix
  * @author Gopal Sharma <gopalsharma66@gmail.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>
@@ -26,19 +26,19 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 
 $capabilities = [
-    'auth/azureb2c:manageconnection' => [
+    'auth/azureb2cfix:manageconnection' => [
         'riskbitmask' => RISK_CONFIG,
         'captype' => 'write',
         'contextlevel' => CONTEXT_USER,
         'archetypes' => []
     ],
-    'auth/azureb2c:manageconnectionconnect' => [
+    'auth/azureb2cfix:manageconnectionconnect' => [
         'riskbitmask' => RISK_CONFIG,
         'captype' => 'write',
         'contextlevel' => CONTEXT_USER,
         'archetypes' => []
     ],
-    'auth/azureb2c:manageconnectiondisconnect' => [
+    'auth/azureb2cfix:manageconnectiondisconnect' => [
         'riskbitmask' => RISK_CONFIG,
         'captype' => 'write',
         'contextlevel' => CONTEXT_USER,

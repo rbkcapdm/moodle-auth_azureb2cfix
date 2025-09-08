@@ -21,12 +21,12 @@
  * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>, 2025 Richard Kirby <rbk@capdm.com>
  */
 
-namespace auth_azureb2c\loginflow;
+namespace auth_azureb2cfix\loginflow;
 
 /**
  * Login flow for the oauth2 authorization code grant.
  */
-class authcode extends \auth_azureb2c\loginflow\base {
+class authcode extends \auth_azureb2cfix\loginflow\base {
     /**
      * Returns a list of potential IdPs that this authentication plugin supports. Used to provide links on the login page.
      *
@@ -42,22 +42,22 @@ class authcode extends \auth_azureb2c\loginflow\base {
         }
 
         if (!empty($this->config->customicon)) {
-            $icon = new \pix_icon('0/customicon', get_string('pluginname', 'auth_azureb2c'), 'auth_azureb2c');
+            $icon = new \pix_icon('0/customicon', get_string('pluginname', 'auth_azureb2cfix'), 'auth_azureb2c');
         } else {
-            $icon = (!empty($this->config->icon)) ? $this->config->icon : 'auth_azureb2c:o365';
+            $icon = (!empty($this->config->icon)) ? $this->config->icon : 'auth_azureb2cfix:o365';
             $icon = explode(':', $icon);
             if (isset($icon[1])) {
                 list($iconcomponent, $iconkey) = $icon;
             } else {
-                $iconcomponent = 'auth_azureb2c';
+                $iconcomponent = 'auth_azureb2cfix';
                 $iconkey = 'o365';
             }
-            $icon = new \pix_icon($iconkey, get_string('pluginname', 'auth_azureb2c'), $iconcomponent);
+            $icon = new \pix_icon($iconkey, get_string('pluginname', 'auth_azureb2cfix'), $iconcomponent);
         }
 
         return [
             [
-                'url' => new \moodle_url('/auth/azureb2c/'),
+                'url' => new \moodle_url('/auth/azureb2cfix/'),
                 'icon' => $icon,
                 'name' => $this->config->opname,
             ]
@@ -65,7 +65,7 @@ class authcode extends \auth_azureb2c\loginflow\base {
     }
 
     /**
-     * Get an azureb2c parameter.
+     * Get an azureb2cfix parameter.
      *
      * This is a modification to PARAM_ALPHANUMEXT to add a few additional characters from Base64-variants.
      *
@@ -73,13 +73,13 @@ class authcode extends \auth_azureb2c\loginflow\base {
      * @param string $fallback The fallback value.
      * @return string The parameter value, or fallback.
      */
-    protected function getazureb2cparam($name, $fallback = '') {
+    protected function getazureb2cfixparam($name, $fallback = '') {
         $val = optional_param($name, $fallback, PARAM_RAW);
         $val = trim($val);
         $valclean = preg_replace('/[^A-Za-z0-9\_\-\.\+\/\=]/i', '', $val);
         if ($valclean !== $val) {
-            \auth_azureb2c\utils::debug('Authorization error.', 'authcode::cleanazureb2cparam', $name);
-            throw new \moodle_exception('errorauthgeneral', 'auth_azureb2c');
+            \auth_azureb2cfix\utils::debug('Authorization error.', 'authcode::cleanazureb2cparam', $name);
+            throw new \moodle_exception('errorauthgeneral', 'auth_azureb2cfix');
         }
         return $valclean;
     }
@@ -92,8 +92,8 @@ class authcode extends \auth_azureb2c\loginflow\base {
     public function handleredirect() {
         global $CFG, $SESSION, $USER;
 
-        $state = $this->getazureb2cparam('state');
-        $code = $this->getazureb2cparam('code');
+        $state = $this->getazureb2cfixparam('state');
+        $code = $this->getazureb2cfixparam('code');
         $promptlogin = (bool)optional_param('promptlogin', 0, PARAM_BOOL);
         $promptaconsent = (bool)optional_param('promptaconsent', 0, PARAM_BOOL);
         $justauth = (bool)optional_param('justauth', 0, PARAM_BOOL);
@@ -111,7 +111,7 @@ class authcode extends \auth_azureb2c\loginflow\base {
                     $urltogo = $SESSION->wantsurl;
                     unset($SESSION->wantsurl);
                 } else {
-                    set_user_preference('auth_azureb2c_edit', 0);
+                    set_user_preference('auth_azureb2cfix_edit', 0);
                     $userid = $USER->id;
                     $urltogo = new \moodle_url("/user/profile.php?id=$userid");
                 }
@@ -142,11 +142,11 @@ class authcode extends \auth_azureb2c\loginflow\base {
         global $CFG, $DB;
 
         // Check user exists.
-        $userfilters = ['username' => $username, 'mnethostid' => $CFG->mnet_localhost_id, 'auth' => 'azureb2c'];
+        $userfilters = ['username' => $username, 'mnethostid' => $CFG->mnet_localhost_id, 'auth' => 'azureb2cfix'];
         $userexists = $DB->record_exists('user', $userfilters);
 
         // Check token exists.
-        $tokenrec = $DB->get_record('auth_azureb2c_token', ['username' => $username]);
+        $tokenrec = $DB->get_record('auth_azureb2cfix_token', ['username' => $username]);
         $code = optional_param('code', null, PARAM_RAW);
         $tokenvalid = (!empty($tokenrec) && !empty($code) && $tokenrec->authcode === $code) ? true : false;
         return ($userexists === true && $tokenvalid === true) ? true : false;
@@ -157,10 +157,10 @@ class authcode extends \auth_azureb2c\loginflow\base {
      *
      * @param bool $promptlogin Whether to prompt for login or use existing session.
      * @param array $stateparams Parameters to store as state.
-     * @param array $extraparams Additional parameters to send with the azureb2c request.
+     * @param array $extraparams Additional parameters to send with the azureb2cfix request.
      */
     public function initiateauthrequest($promptlogin = false, array $stateparams = array(), array $extraparams = array()) {
-        $client = $this->get_azureb2cclient();
+        $client = $this->get_azureb2cfixclient();
         $client->authrequest($promptlogin, $stateparams, $extraparams);
     }
 
@@ -181,7 +181,7 @@ class authcode extends \auth_azureb2c\loginflow\base {
             } else if (strstr( $authparams['error_description'], 'AADB2C90118' )){
                 //AADB2C90118: The user has forgotten their password.
                 $lang = current_language();
-                $url = get_config('auth_azureb2c', 'resetpassendpoint')."&client_id=". get_config('auth_azureb2c', 'clientid')."&nonce=defaultNonce&redirect_uri=". $CFG->wwwroot."/auth/azureb2c/&scope=openid&response_type=code&prompt=login&ui_locales=$lang";
+                $url = get_config('auth_azureb2cfix', 'resetpassendpoint')."&client_id=". get_config('auth_azureb2c', 'clientid')."&nonce=defaultNonce&redirect_uri=". $CFG->wwwroot."/auth/azureb2c/&scope=openid&response_type=code&prompt=login&ui_locales=$lang";
                 redirect($url);
             } else if (strstr($authparams['error_description'], 'AADB2C90075')) {
                 // RBK Session timeout issue on SSO side?
@@ -189,25 +189,25 @@ class authcode extends \auth_azureb2c\loginflow\base {
                 redirect(new \moodle_url('/'));
             
             } else {
-                \auth_azureb2c\utils::debug('Authorization error.', 'authcode::handleauthresponse', $authparams);
-                throw new \moodle_exception('errorauthgeneral', 'auth_azureb2c');
+                \auth_azureb2cfix\utils::debug('Authorization error.', 'authcode::handleauthresponse', $authparams);
+                throw new \moodle_exception('errorauthgeneral', 'auth_azureb2cfix');
             }
         }
 
         if (!isset($authparams['code'])) {
-            \auth_azureb2c\utils::debug('No auth code received.', 'authcode::handleauthresponse', $authparams);
-            throw new \moodle_exception('errorauthnoauthcode', 'auth_azureb2c');
+            \auth_azureb2cfix\utils::debug('No auth code received.', 'authcode::handleauthresponse', $authparams);
+            throw new \moodle_exception('errorauthnoauthcode', 'auth_azureb2cfix');
         }
 
         if (!isset($authparams['state'])) {
-            \auth_azureb2c\utils::debug('No state received.', 'authcode::handleauthresponse', $authparams);
-            throw new \moodle_exception('errorauthunknownstate', 'auth_azureb2c');
+            \auth_azureb2cfix\utils::debug('No state received.', 'authcode::handleauthresponse', $authparams);
+            throw new \moodle_exception('errorauthunknownstate', 'auth_azureb2cfix');
         }
 
         // Validate and expire state.
-        $staterec = $DB->get_record('auth_azureb2c_state', ['state' => $authparams['state']]);
+        $staterec = $DB->get_record('auth_azureb2cfix_state', ['state' => $authparams['state']]);
         if (empty($staterec)) {
-            throw new \moodle_exception('errorauthunknownstate', 'auth_azureb2c');
+            throw new \moodle_exception('errorauthunknownstate', 'auth_azureb2cfix');
         }
         $orignonce = $staterec->nonce;
         $additionaldata = [];
@@ -218,24 +218,24 @@ class authcode extends \auth_azureb2c\loginflow\base {
             }
         }
         $STATEADDITIONALDATA = $additionaldata;
-        $DB->delete_records('auth_azureb2c_state', ['id' => $staterec->id]);
+        $DB->delete_records('auth_azureb2cfix_state', ['id' => $staterec->id]);
 
         // Get token from auth code.
-        $client = $this->get_azureb2cclient();
+        $client = $this->get_azureb2cfixclient();
         $tokenparams = $client->tokenrequest($authparams['code']);
         if (!isset($tokenparams['id_token'])) {
-            throw new \moodle_exception('errorauthnoidtoken', 'auth_azureb2c');
+            throw new \moodle_exception('errorauthnoidtoken', 'auth_azureb2cfix');
         }
 
         // Decode and verify idtoken.
-        list($azureb2cuniqid, $idtoken) = $this->process_idtoken($tokenparams['id_token'], $orignonce);
+        list($azureb2cfixuniqid, $idtoken) = $this->process_idtoken($tokenparams['id_token'], $orignonce);
 
         // Check restrictions.
         $passed = $this->checkrestrictions($idtoken);
         if ($passed !== true && empty($additionaldata['ignorerestrictions'])) {
             $errstr = 'User prevented from logging in due to restrictions.';
-            \auth_azureb2c\utils::debug($errstr, 'handleauthresponse', $idtoken);
-            throw new \moodle_exception('errorrestricted', 'auth_azureb2c');
+            \auth_azureb2cfix\utils::debug($errstr, 'handleauthresponse', $idtoken);
+            throw new \moodle_exception('errorrestricted', 'auth_azureb2cfix');
         }
 
         // This is for setting the system API user.
@@ -247,16 +247,16 @@ class authcode extends \auth_azureb2c\loginflow\base {
                     'statedata' => $additionaldata,
                 ]
             ];
-            $event = \auth_azureb2c\event\user_authed::create($eventdata);
+            $event = \auth_azureb2cfix\event\user_authed::create($eventdata);
             $event->trigger();
             return true;
         }
 
-        // Check if azureb2c user is already migrated.
-        $tokenrec = $DB->get_record('auth_azureb2c_token', ['azureb2cuniqid' => $azureb2cuniqid]);
-        if (isloggedin() === true && (empty($tokenrec) || (isset($USER->auth) && $USER->auth !== 'azureb2c'))) {
+        // Check if azureb2cfix user is already migrated.
+        $tokenrec = $DB->get_record('auth_azureb2cfix_token', ['azureb2cuniqid' => $azureb2cuniqid]);
+        if (isloggedin() === true && (empty($tokenrec) || (isset($USER->auth) && $USER->auth !== 'azureb2cfix'))) {
 
-            // If user is already logged in and trying to link Office 365 account or use it for azureb2c.
+            // If user is already logged in and trying to link Office 365 account or use it for azureb2cfix.
             // Check if that Office 365 account already exists in moodle.
             $userrec = $DB->count_records_sql('SELECT COUNT(*)
                                                  FROM {user}
@@ -266,26 +266,26 @@ class authcode extends \auth_azureb2c\loginflow\base {
 
             if (!empty($userrec)) {
                 if (empty($additionaldata['redirect'])) {
-                    $redirect = '/auth/azureb2c/ucp.php?o365accountconnected=true';
+                    $redirect = '/auth/azureb2cfix/ucp.php?o365accountconnected=true';
                 } else if ($additionaldata['redirect'] == '/local/o365/ucp.php') {
                     $redirect = $additionaldata['redirect'].'?action=connection&o365accountconnected=true';
                 } else {
-                    throw new \moodle_exception('errorinvalidredirect_message', 'auth_azureb2c');
+                    throw new \moodle_exception('errorinvalidredirect_message', 'auth_azureb2cfix');
                 }
                 redirect(new \moodle_url($redirect));
             }
 
-            // If the user is already logged in we can treat this as a "migration" - a user switching to azureb2c.
+            // If the user is already logged in we can treat this as a "migration" - a user switching to azureb2cfix.
             $connectiononly = false;
             if (isset($additionaldata['connectiononly']) && $additionaldata['connectiononly'] === true) {
                 $connectiononly = true;
             }
-            $this->handlemigration($azureb2cuniqid, $authparams, $tokenparams, $idtoken, $connectiononly);
-            $redirect = (!empty($additionaldata['redirect'])) ? $additionaldata['redirect'] : '/auth/azureb2c/ucp.php';
+            $this->handlemigration($azureb2cfixuniqid, $authparams, $tokenparams, $idtoken, $connectiononly);
+            $redirect = (!empty($additionaldata['redirect'])) ? $additionaldata['redirect'] : '/auth/azureb2cfix/ucp.php';
             redirect(new \moodle_url($redirect));
         } else {
-            // Otherwise it's a user logging in normally with azureb2c.
-            $this->handlelogin($azureb2cuniqid, $authparams, $tokenparams, $idtoken);
+            // Otherwise it's a user logging in normally with azureb2cfix.
+            $this->handlelogin($azureb2cfixuniqid, $authparams, $tokenparams, $idtoken);
             redirect(core_login_get_return_url());
         }
     }
@@ -293,60 +293,60 @@ class authcode extends \auth_azureb2c\loginflow\base {
     /**
      * Handle a user migration event.
      *
-     * @param string $azureb2cuniqid A unique identifier for the user.
+     * @param string $azureb2cfixuniqid A unique identifier for the user.
      * @param array $authparams Paramteres receieved from the auth request.
      * @param array $tokenparams Parameters received from the token request.
-     * @param \auth_azureb2c\jwt $idtoken A JWT object representing the received id_token.
+     * @param \auth_azureb2cfix\jwt $idtoken A JWT object representing the received id_token.
      * @param bool $connectiononly Whether to just connect the user (true), or to connect and change login method (false).
      */
-    protected function handlemigration($azureb2cuniqid, $authparams, $tokenparams, $idtoken, $connectiononly = false) {
+    protected function handlemigration($azureb2cfixuniqid, $authparams, $tokenparams, $idtoken, $connectiononly = false) {
         global $USER, $DB, $CFG;
 
-        // Check if azureb2c user is already connected to a Moodle user.
-        $tokenrec = $DB->get_record('auth_azureb2c_token', ['azureb2cuniqid' => $azureb2cuniqid]);
+        // Check if azureb2cfix user is already connected to a Moodle user.
+        $tokenrec = $DB->get_record('auth_azureb2cfix_token', ['azureb2cuniqid' => $azureb2cuniqid]);
         if (!empty($tokenrec)) {
             $existinguserparams = ['username' => $tokenrec->username, 'mnethostid' => $CFG->mnet_localhost_id];
             $existinguser = $DB->get_record('user', $existinguserparams);
             if (empty($existinguser)) {
-                $DB->delete_records('auth_azureb2c_token', ['id' => $tokenrec->id]);
+                $DB->delete_records('auth_azureb2cfix_token', ['id' => $tokenrec->id]);
             } else {
                 if ($USER->username === $tokenrec->username) {
                     // Already connected to current user.
-                    if ($connectiononly !== true && $USER->auth !== 'azureb2c') {
+                    if ($connectiononly !== true && $USER->auth !== 'azureb2cfix') {
                         // Update auth plugin.
-                        $DB->update_record('user', (object)['id' => $USER->id, 'auth' => 'azureb2c']);
+                        $DB->update_record('user', (object)['id' => $USER->id, 'auth' => 'azureb2cfix']);
                         $USER = $DB->get_record('user', ['id' => $USER->id]);
-                        $USER->auth = 'azureb2c';
+                        $USER->auth = 'azureb2cfix';
                     }
                     $this->updatetoken($tokenrec->id, $authparams, $tokenparams);
                     return true;
                 } else {
-                    // azureb2c user connected to user that is not us. Can't continue.
-                    throw new \moodle_exception('errorauthuserconnectedtodifferent', 'auth_azureb2c');
+                    // azureb2cfix user connected to user that is not us. Can't continue.
+                    throw new \moodle_exception('errorauthuserconnectedtodifferent', 'auth_azureb2cfix');
                 }
             }
         }
 
-        // Check if Moodle user is already connected to an azureb2c user.
-        $tokenrec = $DB->get_record('auth_azureb2c_token', ['userid' => $USER->id]);
+        // Check if Moodle user is already connected to an azureb2cfix user.
+        $tokenrec = $DB->get_record('auth_azureb2cfix_token', ['userid' => $USER->id]);
         if (!empty($tokenrec)) {
-            if ($tokenrec->azureb2cuniqid === $azureb2cuniqid) {
+            if ($tokenrec->azureb2cfixuniqid === $azureb2cuniqid) {
                 // Already connected to current user.
-                if ($connectiononly !== true && $USER->auth !== 'azureb2c') {
+                if ($connectiononly !== true && $USER->auth !== 'azureb2cfix') {
                     // Update auth plugin.
-                    $DB->update_record('user', (object)['id' => $USER->id, 'auth' => 'azureb2c']);
+                    $DB->update_record('user', (object)['id' => $USER->id, 'auth' => 'azureb2cfix']);
                     $USER = $DB->get_record('user', ['id' => $USER->id]);
-                    $USER->auth = 'azureb2c';
+                    $USER->auth = 'azureb2cfix';
                 }
                 $this->updatetoken($tokenrec->id, $authparams, $tokenparams);
                 return true;
             } else {
-                throw new \moodle_exception('errorauthuseralreadyconnected', 'auth_azureb2c');
+                throw new \moodle_exception('errorauthuseralreadyconnected', 'auth_azureb2cfix');
             }
         }
 
         // Create token data.
-        $tokenrec = $this->createtoken($azureb2cuniqid, $USER->username, $authparams, $tokenparams, $idtoken, $USER->id);
+        $tokenrec = $this->createtoken($azureb2cfixuniqid, $USER->username, $authparams, $tokenparams, $idtoken, $USER->id);
 
         $eventdata = [
             'objectid' => $USER->id,
@@ -354,16 +354,16 @@ class authcode extends \auth_azureb2c\loginflow\base {
             'other' => [
                 'username' => $USER->username,
                 'userid' => $USER->id,
-                'azureb2cuniqid' => $azureb2cuniqid,
+                'azureb2cfixuniqid' => $azureb2cuniqid,
             ],
         ];
-        $event = \auth_azureb2c\event\user_connected::create($eventdata);
+        $event = \auth_azureb2cfix\event\user_connected::create($eventdata);
         $event->trigger();
 
         // Switch auth method, if requested.
         if ($connectiononly !== true) {
-            if ($USER->auth !== 'azureb2c') {
-                $DB->delete_records('auth_azureb2c_prevlogin', ['userid' => $USER->id]);
+            if ($USER->auth !== 'azureb2cfix') {
+                $DB->delete_records('auth_azureb2cfix_prevlogin', ['userid' => $USER->id]);
                 $userrec = $DB->get_record('user', ['id' => $USER->id]);
                 if (!empty($userrec)) {
                     $prevloginrec = [
@@ -371,12 +371,12 @@ class authcode extends \auth_azureb2c\loginflow\base {
                         'method' => $userrec->auth,
                         'password' => $userrec->password,
                     ];
-                    $DB->insert_record('auth_azureb2c_prevlogin', $prevloginrec);
+                    $DB->insert_record('auth_azureb2cfix_prevlogin', $prevloginrec);
                 }
             }
-            $DB->update_record('user', (object)['id' => $USER->id, 'auth' => 'azureb2c']);
+            $DB->update_record('user', (object)['id' => $USER->id, 'auth' => 'azureb2cfix']);
             $USER = $DB->get_record('user', ['id' => $USER->id]);
-            $USER->auth = 'azureb2c';
+            $USER->auth = 'azureb2cfix';
         }
 
         return true;
@@ -401,12 +401,12 @@ class authcode extends \auth_azureb2c\loginflow\base {
 
     /**
      * Check for an existing user object.
-     * @param string $azureb2cuniqid The user object ID to look up.
+     * @param string $azureb2cfixuniqid The user object ID to look up.
      * @param string $username The original username.
      * @return string If there is an existing user object, return the username associated with it.
      *                If there is no existing user object, return the original username.
      */
-    protected function check_objects($azureb2cuniqid, $username) {
+    protected function check_objects($azureb2cfixuniqid, $username) {
         global $DB;
         $user = null;
         $o365installed = $DB->get_record('config_plugins', ['plugin' => 'local_o365', 'name' => 'version']);
@@ -415,7 +415,7 @@ class authcode extends \auth_azureb2c\loginflow\base {
                       FROM {local_o365_objects} obj
                       JOIN {user} u ON u.id = obj.moodleid
                      WHERE obj.objectid = ? and obj.type = ?';
-            $params = [$azureb2cuniqid, 'user'];
+            $params = [$azureb2cfixuniqid, 'user'];
             $user = $DB->get_record_sql($sql, $params);
         }
         return (!empty($user)) ? $user->username : $username;
@@ -424,15 +424,15 @@ class authcode extends \auth_azureb2c\loginflow\base {
     /**
      * Handle a login event.
      *
-     * @param string $azureb2cuniqid A unique identifier for the user.
+     * @param string $azureb2cfixuniqid A unique identifier for the user.
      * @param array $authparams Parameters receieved from the auth request.
      * @param array $tokenparams Parameters received from the token request.
-     * @param \auth_azureb2c\jwt $idtoken A JWT object representing the received id_token.
+     * @param \auth_azureb2cfix\jwt $idtoken A JWT object representing the received id_token.
      */
-    protected function handlelogin($azureb2cuniqid, $authparams, $tokenparams, $idtoken) {
+    protected function handlelogin($azureb2cfixuniqid, $authparams, $tokenparams, $idtoken) {
         global $DB, $CFG;
 
-        $tokenrec = $DB->get_record('auth_azureb2c_token', ['azureb2cuniqid' => $azureb2cuniqid]);
+        $tokenrec = $DB->get_record('auth_azureb2cfix_token', ['azureb2cuniqid' => $azureb2cuniqid]);
         if (!empty($tokenrec)) {
             // Already connected user.
 
@@ -443,11 +443,11 @@ class authcode extends \auth_azureb2c\loginflow\base {
                 if (empty($user)) {
                     // Token exists, but it doesn't have a valid username.
                     // In this case, delete the token, and try to process login again.
-                    $DB->delete_records('auth_azureb2c_token', ['id' => $tokenrec->id]);
-                    return $this->handlelogin($azureb2cuniqid, $authparams, $tokenparams, $idtoken);
+                    $DB->delete_records('auth_azureb2cfix_token', ['id' => $tokenrec->id]);
+                    return $this->handlelogin($azureb2cfixuniqid, $authparams, $tokenparams, $idtoken);
                 }
                 $tokenrec->userid = $user->id;
-                $DB->update_record('auth_azureb2c_token', $tokenrec);
+                $DB->update_record('auth_azureb2cfix_token', $tokenrec);
             } else {
                 // Existing token with a user ID.
                 $user = $DB->get_record('user', ['id' => $tokenrec->userid]);
@@ -457,8 +457,8 @@ class authcode extends \auth_azureb2c\loginflow\base {
                     $event = \core\event\user_login_failed::create($eventdata);
                     $event->trigger();
                     // Token is invalid, delete it.
-                    $DB->delete_records('auth_azureb2c_token', ['id' => $tokenrec->id]);
-                    return $this->handlelogin($azureb2cuniqud, $authparams, $tokenparams, $idtoken);
+                    $DB->delete_records('auth_azureb2cfix_token', ['id' => $tokenrec->id]);
+                    return $this->handlelogin($azureb2cfixuniqud, $authparams, $tokenparams, $idtoken);
                 }
             }
             $username = $user->username;
@@ -469,9 +469,9 @@ class authcode extends \auth_azureb2c\loginflow\base {
                 return true;
             } else {
                 if (!empty($tokenrec)) {
-                    throw new \moodle_exception('errorlogintoconnectedaccount', 'auth_azureb2c', null, null, '2');
+                    throw new \moodle_exception('errorlogintoconnectedaccount', 'auth_azureb2cfix', null, null, '2');
                 } else {
-                    throw new \moodle_exception('errorauthloginfailednouser', 'auth_azureb2c', null, null, '2');
+                    throw new \moodle_exception('errorauthloginfailednouser', 'auth_azureb2cfix', null, null, '2');
                 }
             }
             return true;
@@ -483,21 +483,21 @@ class authcode extends \auth_azureb2c\loginflow\base {
             //     - New user (maybe create).
 
             // Generate a Moodle username.
-            // Use 'upn' if available for username (Azure-specific), or fall back to lower-case azureb2cuniqid.
+            // Use 'upn' if available for username (Azure-specific), or fall back to lower-case azureb2cfixuniqid.
             $username = $idtoken->claim('upn');
             if (empty($username)) {
-                $username = $azureb2cuniqid;
+                $username = $azureb2cfixuniqid;
             }
 
             // See if we have an object listing.
-            $username = $this->check_objects($azureb2cuniqid, $username);
+            $username = $this->check_objects($azureb2cfixuniqid, $username);
             $matchedwith = $this->check_for_matched($username);
             if (!empty($matchedwith)) {
                 $matchedwith->aadupn = $username;
                 throw new \moodle_exception('errorusermatched', 'local_o365', null, $matchedwith);
             }
             $username = trim(\core_text::strtolower($username));
-            $tokenrec = $this->createtoken($azureb2cuniqid, $username, $authparams, $tokenparams, $idtoken);
+            $tokenrec = $this->createtoken($azureb2cfixuniqid, $username, $authparams, $tokenparams, $idtoken);
 
             $existinguserparams = ['username' => $username, 'mnethostid' => $CFG->mnet_localhost_id];
             if ($DB->record_exists('user', $existinguserparams) !== true) {
@@ -509,12 +509,12 @@ class authcode extends \auth_azureb2c\loginflow\base {
                         // email, and use that instead
                         $count = $DB->count_records('user', array('email' => $info['email'], 'deleted' => 0));
                         if ($count == 0) { // No existing user with same email
-                            $user = create_user_record($username, null, 'azureb2c');
+                            $user = create_user_record($username, null, 'azureb2cfix');
                         } else if ($count == 1) { // Exactly one
                             $user = $DB->get_record('user', array('email' => $info['email']));
                             debugging('Updating user ' . $user->id . ' with old username ' . $user->username . ' to ' . $username);
                             $user->username = $username;
-                            $user->auth = 'azureb2c';
+                            $user->auth = 'azureb2cfix';
                             $DB->update_record('user', $user);
                         } else { // Multiple users with same email - not good!
                             // Trigger login failed event.
@@ -525,7 +525,7 @@ class authcode extends \auth_azureb2c\loginflow\base {
                             throw new moodle_exception('errorauthloginfaileddupemail', 'auth_oidc', null, null, '1'); 
                         }
                     } else {
-                        $user = create_user_record($username, null, 'azureb2c');
+                        $user = create_user_record($username, null, 'azureb2cfix');
                     }
                 } else {
                     // Trigger login failed event.
@@ -533,7 +533,7 @@ class authcode extends \auth_azureb2c\loginflow\base {
                     $eventdata = ['other' => ['username' => $username, 'reason' => $failurereason]];
                     $event = \core\event\user_login_failed::create($eventdata);
                     $event->trigger();
-                    throw new \moodle_exception('errorauthloginfailednouser', 'auth_azureb2c', null, null, '1');
+                    throw new \moodle_exception('errorauthloginfailednouser', 'auth_azureb2cfix', null, null, '1');
                 }
             }
 
@@ -544,9 +544,9 @@ class authcode extends \auth_azureb2c\loginflow\base {
                 return true;
             } else {
                 if (!empty($tokenrec)) {
-                    throw new \moodle_exception('errorlogintoconnectedaccount', 'auth_azureb2c', null, null, '2');
+                    throw new \moodle_exception('errorlogintoconnectedaccount', 'auth_azureb2cfix', null, null, '2');
                 } else {
-                    throw new \moodle_exception('errorauthloginfailednouser', 'auth_azureb2c', null, null, '2');
+                    throw new \moodle_exception('errorauthloginfailednouser', 'auth_azureb2cfix', null, null, '2');
                 }
             }
 

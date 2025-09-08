@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package auth_azureb2c
+ * @package auth_azureb2cfix
  * @author Gopal Sharma <gopalsharma66@gmail.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>
@@ -24,6 +24,6 @@
 require_once(__DIR__.'/../../config.php');
 require_once(__DIR__.'/auth.php');
 
-$auth = new \auth_plugin_azureb2c('authcode');
-$auth->set_httpclient(new \auth_azureb2c\httpclient());
+$auth = new \auth_plugin_azureb2cfix('authcode');
+$auth->set_httpclient(new \auth_azureb2cfix\httpclient());
 $auth->handleredirect();

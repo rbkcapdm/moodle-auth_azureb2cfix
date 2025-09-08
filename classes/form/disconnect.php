@@ -15,20 +15,20 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package auth_azureb2c
+ * @package auth_azureb2cfix
  * @author Gopal Sharma <gopalsharma66@gmail.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>
  */
 
-namespace auth_azureb2c\form;
+namespace auth_azureb2cfix\form;
 
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/lib/formslib.php');
 
 /**
- * azureb2c Disconnect Form.
+ * azureb2cfix Disconnect Form.
  */
 class disconnect extends \moodleform {
     /**
@@ -43,12 +43,12 @@ class disconnect extends \moodleform {
             $userrec = $DB->get_record('user', ['id' => $USER->id]);
         }
 
-        $authconfig = get_config('auth_azureb2c');
-        $opname = (!empty($authconfig->opname)) ? $authconfig->opname : get_string('pluginname', 'auth_azureb2c');
+        $authconfig = get_config('auth_azureb2cfix');
+        $opname = (!empty($authconfig->opname)) ? $authconfig->opname : get_string('pluginname', 'auth_azureb2cfix');
 
         $mform =& $this->_form;
-        $mform->addElement('html', \html_writer::tag('h4', get_string('ucp_disconnect_title', 'auth_azureb2c', $opname)));
-        $mform->addElement('html', \html_writer::div(get_string('ucp_disconnect_details', 'auth_azureb2c', $opname)));
+        $mform->addElement('html', \html_writer::tag('h4', get_string('ucp_disconnect_title', 'auth_azureb2cfix', $opname)));
+        $mform->addElement('html', \html_writer::div(get_string('ucp_disconnect_details', 'auth_azureb2cfix', $opname)));
         $mform->addElement('html', '<br />');
         $mform->addElement('hidden', 'redirect', $this->_customdata['redirect']);
         $mform->setType('redirect', PARAM_URL);
@@ -67,7 +67,7 @@ class disconnect extends \moodleform {
             $prevmethod = $this->_customdata['prevmethod'];
             $newmethod[] =& $mform->createElement('radio', 'newmethod', '', $prevmethod, $prevmethod, $attributes);
         }
-        $mform->addGroup($newmethod, 'newmethodar', get_string('errorauthdisconnectnewmethod', 'auth_azureb2c'), [' '], false);
+        $mform->addGroup($newmethod, 'newmethodar', get_string('errorauthdisconnectnewmethod', 'auth_azureb2cfix'), [' '], false);
         if (!empty($this->_customdata['prevmethod'])) {
             $mform->setDefault('newmethod', $this->_customdata['prevmethod']);
         } else if ($manualenabled === true) {
@@ -75,7 +75,7 @@ class disconnect extends \moodleform {
         }
 
         if ($manualenabled === true) {
-            $mform->addElement('html', \html_writer::div(get_string('errorauthdisconnectifmanual', 'auth_azureb2c')));
+            $mform->addElement('html', \html_writer::div(get_string('errorauthdisconnectifmanual', 'auth_azureb2cfix')));
             $mform->addElement('text', 'username', get_string('username'));
             $mform->addElement('passwordunmask', 'password', get_string('password'));
             $mform->setType('username', PARAM_USERNAME);

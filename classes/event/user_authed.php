@@ -15,16 +15,16 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package auth_azureb2c
+ * @package auth_azureb2cfix
  * @author Gopal Sharma <gopalsharma66@gmail.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>
  */
 
-namespace auth_azureb2c\event;
+namespace auth_azureb2cfix\event;
 
 /**
- * Event fired when a user authenticated with azureb2c, but does not log in.
+ * Event fired when a user authenticated with azureb2cfix, but does not log in.
  */
 class user_authed extends \core\event\base {
     /**
@@ -33,7 +33,7 @@ class user_authed extends \core\event\base {
      * @return string
      */
     public static function get_name() {
-        return get_string('eventuserauthed', 'auth_azureb2c');
+        return get_string('eventuserauthed', 'auth_azureb2cfix');
     }
 
     /**

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package auth_azureb2c
+ * @package auth_azureb2cfix
  * @author Gopal Sharma <gopalsharma66@gmail.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>
@@ -24,7 +24,7 @@
 $observers = [
     [
         'eventname' => '\core\event\user_deleted',
-        'callback' => '\auth_azureb2c\observers::handle_user_deleted',
+        'callback' => '\auth_azureb2cfix\observers::handle_user_deleted',
         'priority' => 200,
         'internal' => false,
     ],

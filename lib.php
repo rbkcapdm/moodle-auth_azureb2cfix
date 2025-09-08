@@ -15,23 +15,23 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package auth_azureb2c
+ * @package auth_azureb2cfix
  * @author Gopal Sharma <gopalsharma66@gmail.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>
  */
 
-function auth_azureb2c_initialize_customicon($filefullname) {
+function auth_azureb2cfix_initialize_customicon($filefullname) {
     global $CFG;
-    $file = get_config('auth_azureb2c', 'customicon');
+    $file = get_config('auth_azureb2cfix', 'customicon');
     $systemcontext = \context_system::instance();
-    $fullpath = "/{$systemcontext->id}/auth_azureb2c/customicon/0{$file}";
+    $fullpath = "/{$systemcontext->id}/auth_azureb2cfix/customicon/0{$file}";
 
     $fs = get_file_storage();
     if (!$file = $fs->get_file_by_hash(sha1($fullpath)) or $file->is_directory()) {
         return false;
     }
-    $pixpluginsdir = 'pix_plugins/auth/azureb2c/0';
+    $pixpluginsdir = 'pix_plugins/auth/azureb2cfix/0';
     $pixpluginsdirparts = explode('/', $pixpluginsdir);
     $curdir = $CFG->dataroot;
     foreach ($pixpluginsdirparts as $dir) {
@@ -41,8 +41,8 @@ function auth_azureb2c_initialize_customicon($filefullname) {
         }
     }
 
-    if (file_exists($CFG->dataroot.'/pix_plugins/auth/azureb2c/0')) {
-        $file->copy_content_to($CFG->dataroot.'/pix_plugins/auth/azureb2c/0/customicon.jpg');
+    if (file_exists($CFG->dataroot.'/pix_plugins/auth/azureb2cfix/0')) {
+        $file->copy_content_to($CFG->dataroot.'/pix_plugins/auth/azureb2cfix/0/customicon.jpg');
         theme_reset_all_caches();
     }
 }
@@ -58,29 +58,29 @@ function auth_azureb2c_initialize_customicon($filefullname) {
  * @param boolean $require Use require_capability rather than has_capability.
  * @return boolean True if has capability.
  */
-function auth_azureb2c_connectioncapability($userid, $mode = 'connect', $require = false) {
+function auth_azureb2cfix_connectioncapability($userid, $mode = 'connect', $require = false) {
     $check = 'has_capability';
     if ($require) {
         // If requiring the capability and user has manageconnection than checking connect and disconnect is not needed.
         $check = 'require_capability';
-        if (has_capability('auth/azureb2c:manageconnection', \context_user::instance($userid), $userid)) {
+        if (has_capability('auth/azureb2cfix:manageconnection', \context_user::instance($userid), $userid)) {
             return true;
         }
-    } else if ($check('auth/azureb2c:manageconnection', \context_user::instance($userid), $userid)) {
+    } else if ($check('auth/azureb2cfix:manageconnection', \context_user::instance($userid), $userid)) {
         return true;
     }
 
     $result = false;
     switch ($mode) {
         case "connect":
-            $result = $check('auth/azureb2c:manageconnectionconnect', \context_user::instance($userid), $userid);
+            $result = $check('auth/azureb2cfix:manageconnectionconnect', \context_user::instance($userid), $userid);
             break;
         case "disconnect":
-            $result = $check('auth/azureb2c:manageconnectiondisconnect', \context_user::instance($userid), $userid);
+            $result = $check('auth/azureb2cfix:manageconnectiondisconnect', \context_user::instance($userid), $userid);
             break;
         case "both":
-            $result = $check('auth/azureb2c:manageconnectionconnect', \context_user::instance($userid), $userid);
-            $result = $result && $check('auth/azureb2c:manageconnectiondisconnect', \context_user::instance($userid), $userid);
+            $result = $check('auth/azureb2cfix:manageconnectionconnect', \context_user::instance($userid), $userid);
+            $result = $result && $check('auth/azureb2cfix:manageconnectiondisconnect', \context_user::instance($userid), $userid);
     }
     if ($require) {
         return true;

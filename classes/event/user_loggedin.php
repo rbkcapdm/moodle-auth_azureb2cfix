@@ -15,16 +15,16 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package auth_azureb2c
+ * @package auth_azureb2cfix
  * @author Gopal Sharma <gopalsharma66@gmail.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>
  */
 
-namespace auth_azureb2c\event;
+namespace auth_azureb2cfix\event;
 
 /**
- * Fired when a user uses azureb2c to log in.
+ * Fired when a user uses azureb2cfix to log in.
  */
 class user_loggedin extends \core\event\base {
     /**
@@ -33,7 +33,7 @@ class user_loggedin extends \core\event\base {
      * @return string
      */
     public static function get_name() {
-        return get_string('eventuserloggedin', 'auth_azureb2c');
+        return get_string('eventuserloggedin', 'auth_azureb2cfix');
     }
 
     /**
@@ -42,7 +42,7 @@ class user_loggedin extends \core\event\base {
      * @return string
      */
     public function get_description() {
-        return "The user with id '$this->userid' has logged in using Azure AD B2C Connect (auth plugin 'auth_azureb2c').";
+        return "The user with id '$this->userid' has logged in using Azure AD B2C Connect (auth plugin 'auth_azureb2cfix').";
     }
 
     /**

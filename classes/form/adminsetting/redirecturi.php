@@ -15,13 +15,13 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package auth_azureb2c
+ * @package auth_azureb2cfix
  * @author Gopal Sharma <gopalsharma66@gmail.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>
  */
 
-namespace auth_azureb2c\form\adminsetting;
+namespace auth_azureb2cfix\form\adminsetting;
 
 /**
  * Displays the redirect URI for easier config.
@@ -76,7 +76,7 @@ class redirecturi extends \admin_setting {
      */
     public function output_html($data, $query = '') {
         global $CFG;
-        $redirecturl = \auth_azureb2c\utils::get_redirecturl();
+        $redirecturl = \auth_azureb2cfix\utils::get_redirecturl();
         $html = \html_writer::tag('h5', $redirecturl);
         return format_admin_setting($this, $this->visiblename, $html, $this->description, true, '', null, $query);
     }

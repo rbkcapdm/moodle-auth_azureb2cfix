@@ -15,13 +15,13 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package auth_azureb2c
+ * @package auth_azureb2cfix
  * @author Gopal Sharma <gopalsharma66@gmail.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>
  */
 
-namespace auth_azureb2c;
+namespace auth_azureb2cfix;
 
 /**
  * Class for working with JWTs.
@@ -42,11 +42,11 @@ class jwt {
      */
     public static function decode($encoded) {
         if (empty($encoded) || !is_string($encoded)) {
-            throw new \moodle_exception('errorjwtempty', 'auth_azureb2c');
+            throw new \moodle_exception('errorjwtempty', 'auth_azureb2cfix');
         }
         $jwtparts = explode('.', $encoded);
         if (count($jwtparts) !== 3) {
-            throw new \moodle_exception('errorjwtmalformed', 'auth_azureb2c');
+            throw new \moodle_exception('errorjwtmalformed', 'auth_azureb2cfix');
         }
 
         $header = base64_decode($jwtparts[0]);
@@ -54,21 +54,21 @@ class jwt {
             $header = @json_decode($header, true);
         }
         if (empty($header) || !is_array($header)) {
-            throw new \moodle_exception('errorjwtcouldnotreadheader', 'auth_azureb2c');
+            throw new \moodle_exception('errorjwtcouldnotreadheader', 'auth_azureb2cfix');
         }
         if (!isset($header['alg'])) {
-            throw new \moodle_exception('errorjwtinvalidheader', 'auth_azureb2c');
+            throw new \moodle_exception('errorjwtinvalidheader', 'auth_azureb2cfix');
         }
 
         $jwsalgs = ['HS256', 'HS384', 'HS512', 'RS256', 'RS384', 'RS512', 'ES256', 'ES384', 'ES512', 'none'];
         if (in_array($header['alg'], $jwsalgs, true) === true) {
             $body = static::decode_jws($jwtparts);
         } else {
-            throw new \moodle_exception('errorjwtunsupportedalg', 'auth_azureb2c');
+            throw new \moodle_exception('errorjwtunsupportedalg', 'auth_azureb2cfix');
         }
 
         if (empty($body) || !is_array($body)) {
-            throw new \moodle_exception('errorjwtbadpayload', 'auth_azureb2c');
+            throw new \moodle_exception('errorjwtbadpayload', 'auth_azureb2cfix');
         }
 
         return [$header, $body];
@@ -93,7 +93,7 @@ class jwt {
      * Create an instance of the class from an encoded JWT string.
      *
      * @param string $encoded The encoded JWT.
-     * @return \auth_azureb2c\jwt A JWT instance.
+     * @return \auth_azureb2cfix\jwt A JWT instance.
      */
     public static function instance_from_encoded($encoded) {
         list($header, $body) = static::decode($encoded);

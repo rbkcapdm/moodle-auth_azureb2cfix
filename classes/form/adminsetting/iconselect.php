@@ -15,13 +15,13 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package auth_azureb2c
+ * @package auth_azureb2cfix
  * @author Gopal Sharma <gopalsharma66@gmail.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>
  */
 
-namespace auth_azureb2c\form\adminsetting;
+namespace auth_azureb2cfix\form\adminsetting;
 
 /**
  * Choose an icon for the identity provider entry on the login page.
@@ -87,7 +87,7 @@ class iconselect extends \admin_setting {
      */
     public function output_html($data, $query = '') {
         global $CFG, $OUTPUT;
-        $attrs = array('type' => 'text/css', 'rel' => 'stylesheet', 'href' => new \moodle_url('/auth/azureb2c/classes/form/adminsetting/iconselect.css'));
+        $attrs = array('type' => 'text/css', 'rel' => 'stylesheet', 'href' => new \moodle_url('/auth/azureb2cfix/classes/form/adminsetting/iconselect.css'));
         $html = \html_writer::empty_tag('link', $attrs);
         $html .= \html_writer::start_tag('div', ['style' => 'max-width: 390px']);
         $selected = (!empty($data)) ? $data : $this->defaultsetting;

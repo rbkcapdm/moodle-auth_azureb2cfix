@@ -15,13 +15,13 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package auth_azureb2c
+ * @package auth_azureb2cfix
  * @author Gopal Sharma <gopalsharma66@gmail.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>
  */
 
-namespace auth_azureb2c;
+namespace auth_azureb2cfix;
 
 require_once($CFG->dirroot.'/lib/filelib.php');
 
@@ -38,7 +38,7 @@ class observers {
     public static function handle_user_deleted(\core\event\user_deleted $event) {
         global $DB;
         $eventdata = $event->get_data();
-        $DB->delete_records('auth_azureb2c_token', ['username' => $eventdata['other']['username']]);
+        $DB->delete_records('auth_azureb2cfix_token', ['username' => $eventdata['other']['username']]);
         return true;
     }
 }

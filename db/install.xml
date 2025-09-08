@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="auth/azureb2c/db" VERSION="20141030" COMMENT="XMLDB file for Moodle auth/azureb2c plugin"
+<XMLDB PATH="auth/azureb2cfix/db" VERSION="20141030" COMMENT="XMLDB file for Moodle auth/azureb2c plugin"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
   <TABLES>
-    <TABLE NAME="auth_azureb2c_prevlogin" COMMENT="Stores previous login methods.">
+    <TABLE NAME="auth_azureb2cfix_prevlogin" COMMENT="Stores previous login methods.">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="user id"/>
@@ -18,7 +18,7 @@
         <INDEX NAME="userid" UNIQUE="true" FIELDS="userid"/>
       </INDEXES>
     </TABLE>
-    <TABLE NAME="auth_azureb2c_state" COMMENT="Map of state to sesskey.">
+    <TABLE NAME="auth_azureb2cfix_state" COMMENT="Map of state to sesskey.">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="sesskey" TYPE="char" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="user sesskey"/>
@@ -35,13 +35,13 @@
         <INDEX NAME="timecreated" UNIQUE="false" FIELDS="timecreated"/>
       </INDEXES>
     </TABLE>
-    <TABLE NAME="auth_azureb2c_token" COMMENT="Stores tokens.">
+    <TABLE NAME="auth_azureb2cfix_token" COMMENT="Stores tokens.">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-        <FIELD NAME="azureb2cuniqid" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="azureb2c uniqid"/>
+        <FIELD NAME="azureb2cfixuniqid" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="azureb2c uniqid"/>
         <FIELD NAME="username" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="username"/>
         <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" DEFAULT="0" COMMENT="moodle userid"/>
-        <FIELD NAME="azureb2cusername" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="azureb2c username"/>
+        <FIELD NAME="azureb2cfixusername" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="azureb2c username"/>
         <FIELD NAME="scope" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="token scope"/>
         <FIELD NAME="resource" TYPE="char" LENGTH="127" NOTNULL="true" SEQUENCE="false" COMMENT="token resource"/>
         <FIELD NAME="authcode" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="auth code"/>
@@ -54,7 +54,7 @@
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
       <INDEXES>
-        <INDEX NAME="azureb2cuniqid" UNIQUE="false" FIELDS="azureb2cuniqid"/>
+        <INDEX NAME="azureb2cfixuniqid" UNIQUE="false" FIELDS="azureb2cuniqid"/>
       </INDEXES>
     </TABLE>
   </TABLES>

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package auth_azureb2c
+ * @package auth_azureb2cfix
  * @author Gopal Sharma <gopalsharma66@gmail.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>
@@ -26,12 +26,12 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 
 /**
- * Tests azureb2cclient.
+ * Tests azureb2cfixclient.
  *
- * @group auth_azureb2c
+ * @group auth_azureb2cfix
  * @group office365
  */
-class auth_azureb2c_azureb2cclient_testcase extends \advanced_testcase {
+class auth_azureb2cfix_azureb2cclient_testcase extends \advanced_testcase {
     /**
      * Perform setup before every test. This tells Moodle's phpunit to reset the database after every test.
      */
@@ -44,8 +44,8 @@ class auth_azureb2c_azureb2cclient_testcase extends \advanced_testcase {
      * Test getting and setting credentials.
      */
     public function test_creds_getters_and_setters() {
-        $httpclient = new \auth_azureb2c\tests\mockhttpclient();
-        $client = new \auth_azureb2c\tests\mockazureb2cclient($httpclient);
+        $httpclient = new \auth_azureb2cfix\tests\mockhttpclient();
+        $client = new \auth_azureb2cfix\tests\mockazureb2cclient($httpclient);
 
         $this->assertNull($client->get_clientid());
         $this->assertNull($client->get_clientsecret());
@@ -109,8 +109,8 @@ class auth_azureb2c_azureb2cclient_testcase extends \advanced_testcase {
             $this->expectException($expectedexception[0]);
             $this->expectExceptionMessage($expectedexception[1]);
         }
-        $httpclient = new \auth_azureb2c\tests\mockhttpclient();
-        $client = new \auth_azureb2c\tests\mockazureb2cclient($httpclient);
+        $httpclient = new \auth_azureb2cfix\tests\mockhttpclient();
+        $client = new \auth_azureb2cfix\tests\mockazureb2cclient($httpclient);
         $client->setendpoints($endpoints);
 
         foreach ($endpoints as $type => $uri) {

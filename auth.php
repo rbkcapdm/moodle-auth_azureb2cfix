@@ -29,9 +29,9 @@ require_once($CFG->dirroot.'/login/lib.php');
 /**
  * Azure AD B2C Connect Authentication Plugin.
  */
-class auth_plugin_azureb2c extends \auth_plugin_base {
+class auth_plugin_azureb2cfix extends \auth_plugin_base {
     /** @var string Authentication plugin type - the same as db field. */
-    public $authtype = 'azureb2c';
+    public $authtype = 'azureb2cfix';
 
     /** @var object Plugin config. */
     public $config;
@@ -53,17 +53,17 @@ class auth_plugin_azureb2c extends \auth_plugin_base {
             if (!empty($forceloginflow) && is_string($forceloginflow)) {
                 $loginflow = $forceloginflow;
             } else {
-                $configuredloginflow = get_config('auth_azureb2c', 'loginflow');
+                $configuredloginflow = get_config('auth_azureb2cfix', 'loginflow');
                 if (!empty($configuredloginflow)) {
                     $loginflow = $configuredloginflow;
                 }
             }
         }
-        $loginflowclass = '\auth_azureb2c\loginflow\\'.$loginflow;
+        $loginflowclass = '\auth_azureb2cfix\loginflow\\'.$loginflow;
         if (class_exists($loginflowclass)) {
             $this->loginflow = new $loginflowclass($this->config);
         } else {
-            throw new \coding_exception(get_string('errorbadloginflow', 'auth_azureb2c'));
+            throw new \coding_exception(get_string('errorbadloginflow', 'auth_azureb2cfix'));
         }
         $this->config = $this->loginflow->config;
     }
@@ -81,9 +81,9 @@ class auth_plugin_azureb2c extends \auth_plugin_base {
     /**
      * Set an HTTP client to use.
      *
-     * @param auth_azureb2chttpclientinterface $httpclient [description]
+     * @param auth_azureb2cfixhttpclientinterface $httpclient [description]
      */
-    public function set_httpclient(\auth_azureb2c\httpclientinterface $httpclient) {
+    public function set_httpclient(\auth_azureb2cfix\httpclientinterface $httpclient) {
         return $this->loginflow->set_httpclient($httpclient);
     }
 
@@ -110,9 +110,9 @@ class auth_plugin_azureb2c extends \auth_plugin_base {
     }
 
     /**
-     * Handle azureb2c disconnection from Moodle account.
+     * Handle azureb2cfix disconnection from Moodle account.
      *
-     * @param bool $justremovetokens If true, just remove the stored azureb2c tokens for the user, otherwise revert login methods.
+     * @param bool $justremovetokens If true, just remove the stored azureb2cfix tokens for the user, otherwise revert login methods.
      * @param bool $donotremovetokens If true, do not remove tokens when disconnecting. This migrates from a login account to a
      *                                "linked" account.
      * @param \moodle_url $redirect Where to redirect if successful.
@@ -180,27 +180,27 @@ class auth_plugin_azureb2c extends \auth_plugin_base {
      */
     public function user_authenticated_hook(&$user, $username, $password) {
         global $DB;
-        if (!empty($user) && !empty($user->auth) && $user->auth === 'azureb2c') {
-            $tokenrec = $DB->get_record('auth_azureb2c_token', ['userid' => $user->id]);
+        if (!empty($user) && !empty($user->auth) && $user->auth === 'azureb2cfix') {
+            $tokenrec = $DB->get_record('auth_azureb2cfix_token', ['userid' => $user->id]);
             if (!empty($tokenrec)) {
                 // If the token record username is out of sync (ie username changes), update it.
                 if ($tokenrec->username != $user->username) {
                     $updatedtokenrec = new \stdClass;
                     $updatedtokenrec->id = $tokenrec->id;
                     $updatedtokenrec->username = $user->username;
-                    $DB->update_record('auth_azureb2c_token', $updatedtokenrec);
+                    $DB->update_record('auth_azureb2cfix_token', $updatedtokenrec);
                     $tokenrec = $updatedtokenrec;
                 }
             } else {
                 // There should always be a token record here, so a failure here means
                 // the user's token record doesn't yet contain their userid.
-                $tokenrec = $DB->get_record('auth_azureb2c_token', ['username' => $username]);
+                $tokenrec = $DB->get_record('auth_azureb2cfix_token', ['username' => $username]);
                 if (!empty($tokenrec)) {
                     $tokenrec->userid = $user->id;
                     $updatedtokenrec = new \stdClass;
                     $updatedtokenrec->id = $tokenrec->id;
                     $updatedtokenrec->userid = $user->id;
-                    $DB->update_record('auth_azureb2c_token', $updatedtokenrec);
+                    $DB->update_record('auth_azureb2cfix_token', $updatedtokenrec);
                     $tokenrec = $updatedtokenrec;
                 }
             }
@@ -210,7 +210,7 @@ class auth_plugin_azureb2c extends \auth_plugin_base {
                 'userid' => $user->id,
                 'other' => ['username' => $user->username],
             ];
-            $event = \auth_azureb2c\event\user_loggedin::create($eventdata);
+            $event = \auth_azureb2cfix\event\user_loggedin::create($eventdata);
             $event->trigger();
         }
     }
@@ -221,6 +221,6 @@ class auth_plugin_azureb2c extends \auth_plugin_base {
     public function cron() {
         global $DB;
         $params = [time() - (5 * 60)];
-        $DB->delete_records_select('auth_azureb2c_state', 'timecreated < ?', $params);
+        $DB->delete_records_select('auth_azureb2cfix_state', 'timecreated < ?', $params);
     }
 }
