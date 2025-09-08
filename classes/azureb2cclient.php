@@ -42,6 +42,9 @@ class azureb2cclient {
     /** @var array Array of endpoints. */
     protected $endpoints = [];
 
+    /** @var string Some resource URI. */
+    protected $resource;
+
     /**
      * Constructor.
      *

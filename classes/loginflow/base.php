@@ -98,8 +98,9 @@ class base {
 
         $idtoken = \auth_azureb2c\jwt::instance_from_encoded($tokenrec->idtoken);
 
+        // B2C provides custom field mapping, skip azureb2c mapping if B2C is present.
         $o365installed = $DB->get_record('config_plugins', ['plugin' => 'local_o365', 'name' => 'version']);
-        if (!empty($o365installed) && $this->config->o365mapping === '1') {
+        if (!empty($o365installed)) {
             return [];
         }
 
@@ -108,43 +109,11 @@ class base {
         $firstname = $idtoken->claim('given_name');
         if (!empty($firstname)) {
             $userinfo['firstname'] = $firstname;
-        } elseif (!empty($name = $idtoken->claim('name'))) {
-            $names = array_filter(
-                array_map(
-                    function ($name) {
-                        return trim($name);
-                    },
-                    explode(' ', $name, 2)
-                ),
-                function ($name) {
-                    return !empty($name);
-                }
-            );
-            $givenname = trim(reset($names));
-            if (!empty($givenname)) {
-                $userinfo['firstname'] = $givenname;
-            }
         }
 
         $lastname = $idtoken->claim('family_name');
         if (!empty($lastname)) {
             $userinfo['lastname'] = $lastname;
-        } elseif (!empty($name = $idtoken->claim('name'))) {
-            $names = array_filter(
-                array_map(
-                    function ($name) {
-                        return trim($name);
-                    },
-                    explode(' ', $name, 2)
-                ),
-                function ($name) {
-                    return !empty($name);
-                }
-            );
-            $surname = array_pop($names);
-            if (!empty($surname)) {
-                $userinfo['lastname'] = $surname;
-            }
         }
 
         $email = $idtoken->claim('emails');
@@ -507,12 +476,7 @@ class base {
         $tokenrec->scope = !empty($tokenparams['scope']) ? $tokenparams['scope'] : 'openid profile email';
         $tokenrec->resource = !empty($tokenparams['resource']) ? $tokenparams['resource'] : $this->config->azureb2cresource;
         $tokenrec->authcode = $authparams['code'];
-        $tokenrec->token = null;
-        if (isset($tokenparams['access_token'])) {
-            $tokenrec->token = $tokenparams['access_token'];
-        } else if (isset($tokenparams['id_token'])) {
-            $tokenrec->token = $tokenparams['id_token'];
-        }
+        $tokenrec->token = $tokenparams['access_token'];
         if (!empty($tokenparams['expires_on'])) {
             $tokenrec->expiry = $tokenparams['expires_on'];
         } else if (isset($tokenparams['expires_in'])) {
@@ -538,12 +502,7 @@ class base {
         $tokenrec = new \stdClass;
         $tokenrec->id = $tokenid;
         $tokenrec->authcode = $authparams['code'];
-        $tokenrec->token = null;
-        if (isset($tokenparams['access_token'])) {
-            $tokenrec->token = $tokenparams['access_token'];
-        } else if (isset($tokenparams['id_token'])) {
-            $tokenrec->token = $tokenparams['id_token'];
-        }
+        $tokenrec->token = $tokenparams['access_token'];
         if (!empty($tokenparams['expires_on'])) {
             $tokenrec->expiry = $tokenparams['expires_on'];
         } else if (isset($tokenparams['expires_in'])) {

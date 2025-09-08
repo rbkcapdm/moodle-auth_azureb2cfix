@@ -183,6 +183,10 @@ class authcode extends \auth_azureb2c\loginflow\base {
                 $lang = current_language();
                 $url = get_config('auth_azureb2c', 'resetpassendpoint')."&client_id=". get_config('auth_azureb2c', 'clientid')."&nonce=defaultNonce&redirect_uri=". $CFG->wwwroot."/auth/azureb2c/&scope=openid&response_type=code&prompt=login&ui_locales=$lang";
                 redirect($url);
+            } else if (strstr($authparams['error_description'], 'AADB2C90075')) {
+            // RBK Session timeout issue on SSO side?
+            // Bounce back to main page???
+            redirect(new \moodle_url('/'));
             
             } else {
                 \auth_azureb2c\utils::debug('Authorization error.', 'authcode::handleauthresponse', $authparams);
@@ -454,13 +458,22 @@ class authcode extends \auth_azureb2c\loginflow\base {
                     $event->trigger();
                     // Token is invalid, delete it.
                     $DB->delete_records('auth_azureb2c_token', ['id' => $tokenrec->id]);
-                    return $this->handlelogin($azureb2cuniqid, $authparams, $tokenparams, $idtoken);
+                    return $this->handlelogin($azureb2cuniqud, $authparams, $tokenparams, $idtoken);
                 }
             }
             $username = $user->username;
             $this->updatetoken($tokenrec->id, $authparams, $tokenparams);
             $user = authenticate_user_login($username, null, true);
-            complete_user_login($user);
+            if (!empty($user)) {
+                complete_user_login($user);
+                return true;
+            } else {
+                if (!empty($tokenrec)) {
+                    throw new \moodle_exception('errorlogintoconnectedaccount', 'auth_azureb2c', null, null, '2');
+                } else {
+                    throw new \moodle_exception('errorauthloginfailednouser', 'auth_azureb2c', null, null, '2');
+                }
+            }
             return true;
         } else {
             // No existing token, user not connected.
@@ -492,11 +505,28 @@ class authcode extends \auth_azureb2c\loginflow\base {
                 if (empty($CFG->authpreventaccountcreation)) {
                     if (!$CFG->allowaccountssameemail) {
                         $info = $this->get_userinfo($username);
-                        if ($DB->count_records('user', array('email' => $info['email'], 'deleted' => 0)) > 0) {
-                            throw new \moodle_exception('errorauthloginfaileddupemail', 'auth_azureb2c', null, null, '1');
+            // RBK See if an existing record exists with the same
+            // email, and use that instead
+            $count = $DB->count_records('user', array('email' => $info['email'], 'deleted' => 0));
+            if ($count == 0) { // No existing user with same email
+                $user = create_user_record($username, null, 'azureb2c');
+            } else if ($count == 1) { // Exactly one
+                $user = $DB->get_record('user', array('email' => $info['email']));
+                debugging('Updating user ' . $user->id . ' with old username ' . $user->username . ' to ' . $username);
+                $user->username = $username;
+                $user->auth = 'azureb2c';
+                $DB->update_record('user', $user);
+            } else { // Multiple users with same email - not good!
+                        // Trigger login failed event.
+                            $failurereason = AUTH_LOGIN_FAILED;
+                            $eventdata = ['other' => ['username' => $username, 'reason' => $failurereason]];
+                            $event = \core\event\user_login_failed::create($eventdata);
+                            $event->trigger();
+                            throw new moodle_exception('errorauthloginfaileddupemail', 'auth_oidc', null, null, '1'); 
                         }
-                    }
-                    $user = create_user_record($username, null, 'azureb2c');
+                    } else {
+                        $user = create_user_record($username, null, 'azureb2c');
+                }
                 } else {
                     // Trigger login failed event.
                     $failurereason = AUTH_LOGIN_NOUSER;
