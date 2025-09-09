@@ -65,9 +65,9 @@ function xmldb_auth_azureb2cfix_upgrade($oldversion) {
         $sql = 'SELECT u.id as userid,
                        u.username as username,
                        tok.id as tokenid,
-                       tok.azureb2cfixuniqid as azureb2cuniqid,
+                       tok.azureb2cfixuniqid as azureb2cfixniqid,
                        tok.idtoken as idtoken,
-                       tok.azureb2cfixusername as azureb2cusername
+                       tok.azureb2cfixusername as azureb2cfixsername
                   FROM {auth_azureb2cfix_token} tok
                   JOIN {user} u ON u.username = tok.username
                  WHERE u.auth = ? AND deleted = ?';
@@ -90,7 +90,7 @@ function xmldb_auth_azureb2cfix_upgrade($oldversion) {
                 if (empty($user->azureb2cfixusername)) {
                     $updatedtoken = new \stdClass;
                     $updatedtoken->id = $user->tokenid;
-                    $updatedtoken->azureb2cfixusername = $azureb2cusername;
+                    $updatedtoken->azureb2cfixusername = $azureb2cfixsername;
                     $DB->update_record('auth_azureb2cfix_token', $updatedtoken);
                 }
 

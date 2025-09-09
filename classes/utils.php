@@ -44,16 +44,16 @@ class utils {
         $result = @json_decode($response, true);
         if (empty($result) || !is_array($result)) {
             self::debug('Bad response received', $caller, $response);
-            throw new \moodle_exception('errorazureb2cfixcall', 'auth_azureb2c');
+            throw new \moodle_exception('errorazureb2cfixcall', 'auth_azureb2cfix);
         }
 
         if (isset($result['error'])) {
             $errmsg = 'Error response received.';
             self::debug($errmsg, $caller, $result);
             if (isset($result['error_description'])) {
-                throw new \moodle_exception('errorazureb2cfixcall_message', 'auth_azureb2c', '', $result['error_description']);
+                throw new \moodle_exception('errorazureb2cfixcall_message', 'auth_azureb2cfix, '', $result['error_description']);
             } else {
-                throw new \moodle_exception('errorazureb2cfixcall', 'auth_azureb2c');
+                throw new \moodle_exception('errorazureb2cfixcall', 'auth_azureb2cfix);
             }
         }
 
@@ -61,7 +61,7 @@ class utils {
             if (!isset($result[$key])) {
                 $errmsg = 'Invalid structure received. No "'.$key.'"';
                 self::debug($errmsg, $caller, $result);
-                throw new \moodle_exception('errorazureb2cfixcall', 'auth_azureb2c');
+                throw new \moodle_exception('errorazureb2cfixcall', 'auth_azureb2cfix);
             }
 
             if ($val !== null && $result[$key] !== $val) {
@@ -69,7 +69,7 @@ class utils {
                 $strval = self::tostring($val);
                 $errmsg = 'Invalid structure received. Invalid "'.$key.'". Received "'.$strreceivedval.'", expected "'.$strval.'"';
                 self::debug($errmsg, $caller, $result);
-                throw new \moodle_exception('errorazureb2cfixcall', 'auth_azureb2c');
+                throw new \moodle_exception('errorazureb2cfixcall', 'auth_azureb2cfix);
             }
         }
         return $result;

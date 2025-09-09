@@ -157,7 +157,7 @@ class provider implements
             $records = $DB->get_recordset($table, $filterparams);
             foreach ($records as $record) {
                 writer::with_context($context)->export_data([
-                    get_string('privacy:metadata:auth_azureb2cfix', 'auth_azureb2c'),
+                    get_string('privacy:metadata:auth_azureb2cfix', 'auth_azureb2cfix),
                     get_string('privacy:metadata:'.$table, 'auth_azureb2cfix')
                 ], $record);
             }

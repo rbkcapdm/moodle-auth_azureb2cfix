@@ -138,11 +138,11 @@ class rocreds extends \auth_azureb2cfix\loginflow\base {
         $authparams = ['code' => ''];
 
         $azureb2cfixusername = $username;
-        $azureb2cfixtoken = $DB->get_records('auth_azureb2c_token', ['username' => $username]);
+        $azureb2cfixtoken = $DB->get_records('auth_azureb2cfixtoken', ['username' => $username]);
         if (!empty($azureb2cfixtoken)) {
-            $azureb2cfixtoken = array_shift($azureb2ctoken);
-            if (!empty($azureb2cfixtoken) && !empty($azureb2ctoken->azureb2cusername)) {
-                $azureb2cfixusername = $azureb2ctoken->azureb2cusername;
+            $azureb2cfixtoken = array_shift($azureb2cfixoken);
+            if (!empty($azureb2cfixtoken) && !empty($azureb2cfixoken->azureb2cfixsername)) {
+                $azureb2cfixusername = $azureb2cfixoken->azureb2cfixsername;
             }
         }
 
@@ -159,7 +159,7 @@ class rocreds extends \auth_azureb2cfix\loginflow\base {
                 return false;
             }
 
-            $tokenrec = $DB->get_record('auth_azureb2cfix_token', ['azureb2cuniqid' => $azureb2cuniqid]);
+            $tokenrec = $DB->get_record('auth_azureb2cfix_token', ['azureb2cfixniqid' => $azureb2cfixniqid]);
             if (!empty($tokenrec)) {
                 $this->updatetoken($tokenrec->id, $authparams, $tokenparams);
             } else {

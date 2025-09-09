@@ -50,7 +50,7 @@ Add the follwing code to theme's `profile.php` and if you are not using the cust
 ?>
 
 <?php
-	$url = get_config('auth_azureb2cfix', 'editprofileendpoint')."&client_id=". get_config('auth_azureb2c', 'clientid')."&
+	$url = get_config('auth_azureb2cfix', 'editprofileendpoint')."&client_id=". get_config('auth_azureb2cfix, 'clientid')."&
 	nonce=defaultNonce&redirect_uri=". $CFG->wwwroot."/auth/azureb2cfix/&scope=openid&response_type=id_token"; 
 ?>
 <a href="<?php echo $url;?>"><?php echo get_string('editmyprofile'); ?></a>

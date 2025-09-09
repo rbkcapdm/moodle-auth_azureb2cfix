@@ -42,7 +42,7 @@ class authcode extends \auth_azureb2cfix\loginflow\base {
         }
 
         if (!empty($this->config->customicon)) {
-            $icon = new \pix_icon('0/customicon', get_string('pluginname', 'auth_azureb2cfix'), 'auth_azureb2c');
+            $icon = new \pix_icon('0/customicon', get_string('pluginname', 'auth_azureb2cfix'), 'auth_azureb2cfix);
         } else {
             $icon = (!empty($this->config->icon)) ? $this->config->icon : 'auth_azureb2cfix:o365';
             $icon = explode(':', $icon);
@@ -78,7 +78,7 @@ class authcode extends \auth_azureb2cfix\loginflow\base {
         $val = trim($val);
         $valclean = preg_replace('/[^A-Za-z0-9\_\-\.\+\/\=]/i', '', $val);
         if ($valclean !== $val) {
-            \auth_azureb2cfix\utils::debug('Authorization error.', 'authcode::cleanazureb2cparam', $name);
+            \auth_azureb2cfix\utils::debug('Authorization error.', 'authcode::cleanazureb2cfixaram', $name);
             throw new \moodle_exception('errorauthgeneral', 'auth_azureb2cfix');
         }
         return $valclean;
@@ -181,7 +181,7 @@ class authcode extends \auth_azureb2cfix\loginflow\base {
             } else if (strstr( $authparams['error_description'], 'AADB2C90118' )){
                 //AADB2C90118: The user has forgotten their password.
                 $lang = current_language();
-                $url = get_config('auth_azureb2cfix', 'resetpassendpoint')."&client_id=". get_config('auth_azureb2c', 'clientid')."&nonce=defaultNonce&redirect_uri=". $CFG->wwwroot."/auth/azureb2c/&scope=openid&response_type=code&prompt=login&ui_locales=$lang";
+                $url = get_config('auth_azureb2cfix', 'resetpassendpoint')."&client_id=". get_config('auth_azureb2cfix, 'clientid')."&nonce=defaultNonce&redirect_uri=". $CFG->wwwroot."/auth/azureb2cfix&scope=openid&response_type=code&prompt=login&ui_locales=$lang";
                 redirect($url);
             } else if (strstr($authparams['error_description'], 'AADB2C90075')) {
                 // RBK Session timeout issue on SSO side?
@@ -253,7 +253,7 @@ class authcode extends \auth_azureb2cfix\loginflow\base {
         }
 
         // Check if azureb2cfix user is already migrated.
-        $tokenrec = $DB->get_record('auth_azureb2cfix_token', ['azureb2cuniqid' => $azureb2cuniqid]);
+        $tokenrec = $DB->get_record('auth_azureb2cfix_token', ['azureb2cfixniqid' => $azureb2cfixniqid]);
         if (isloggedin() === true && (empty($tokenrec) || (isset($USER->auth) && $USER->auth !== 'azureb2cfix'))) {
 
             // If user is already logged in and trying to link Office 365 account or use it for azureb2cfix.
@@ -303,7 +303,7 @@ class authcode extends \auth_azureb2cfix\loginflow\base {
         global $USER, $DB, $CFG;
 
         // Check if azureb2cfix user is already connected to a Moodle user.
-        $tokenrec = $DB->get_record('auth_azureb2cfix_token', ['azureb2cuniqid' => $azureb2cuniqid]);
+        $tokenrec = $DB->get_record('auth_azureb2cfix_token', ['azureb2cfixniqid' => $azureb2cfixniqid]);
         if (!empty($tokenrec)) {
             $existinguserparams = ['username' => $tokenrec->username, 'mnethostid' => $CFG->mnet_localhost_id];
             $existinguser = $DB->get_record('user', $existinguserparams);
@@ -330,7 +330,7 @@ class authcode extends \auth_azureb2cfix\loginflow\base {
         // Check if Moodle user is already connected to an azureb2cfix user.
         $tokenrec = $DB->get_record('auth_azureb2cfix_token', ['userid' => $USER->id]);
         if (!empty($tokenrec)) {
-            if ($tokenrec->azureb2cfixuniqid === $azureb2cuniqid) {
+            if ($tokenrec->azureb2cfixuniqid === $azureb2cfixniqid) {
                 // Already connected to current user.
                 if ($connectiononly !== true && $USER->auth !== 'azureb2cfix') {
                     // Update auth plugin.
@@ -354,7 +354,7 @@ class authcode extends \auth_azureb2cfix\loginflow\base {
             'other' => [
                 'username' => $USER->username,
                 'userid' => $USER->id,
-                'azureb2cfixuniqid' => $azureb2cuniqid,
+                'azureb2cfixuniqid' => $azureb2cfixniqid,
             ],
         ];
         $event = \auth_azureb2cfix\event\user_connected::create($eventdata);
@@ -432,7 +432,7 @@ class authcode extends \auth_azureb2cfix\loginflow\base {
     protected function handlelogin($azureb2cfixuniqid, $authparams, $tokenparams, $idtoken) {
         global $DB, $CFG;
 
-        $tokenrec = $DB->get_record('auth_azureb2cfix_token', ['azureb2cuniqid' => $azureb2cuniqid]);
+        $tokenrec = $DB->get_record('auth_azureb2cfix_token', ['azureb2cfixniqid' => $azureb2cfixniqid]);
         if (!empty($tokenrec)) {
             // Already connected user.
 
