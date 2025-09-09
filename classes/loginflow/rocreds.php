@@ -159,7 +159,7 @@ class rocreds extends \auth_azureb2cfix\loginflow\base {
                 return false;
             }
 
-            $tokenrec = $DB->get_record('auth_azureb2cfix_token', ['azureb2cfixniqid' => $azureb2cfixniqid]);
+            $tokenrec = $DB->get_record('auth_azureb2cfix_token', ['azureb2cfixuniqid' => $azureb2cfixuniqid]);
             if (!empty($tokenrec)) {
                 $this->updatetoken($tokenrec->id, $authparams, $tokenparams);
             } else {

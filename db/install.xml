@@ -54,7 +54,7 @@
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
       <INDEXES>
-        <INDEX NAME="azureb2cfixuniqid" UNIQUE="false" FIELDS="azureb2cfixniqid"/>
+        <INDEX NAME="azureb2cfixuniqid" UNIQUE="false" FIELDS="azureb2cfixuniqid"/>
       </INDEXES>
     </TABLE>
   </TABLES>

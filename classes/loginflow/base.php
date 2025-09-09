@@ -230,7 +230,7 @@ class base {
             // azureb2cfix-created usernames are usually very verbose, so we'll allow them to choose a sensible one.
             // Otherwise, keep their existing username.
             $azureb2cfixtoken = $DB->get_record('auth_azureb2cfixtoken', ['userid' => $userrec->id]);
-            $ccun = (isset($azureb2cfixtoken->azureb2cfixniqid) && strtolower($azureb2cfixoken->azureb2cfixniqid) === $userrec->username) ? true : false;
+            $ccun = (isset($azureb2cfixtoken->azureb2cfixuniqid) && strtolower($azureb2cfixoken->azureb2cfixuniqid) === $userrec->username) ? true : false;
             $customdata = [
                 'canchooseusername' => $ccun,
                 'prevmethod' => $prevauthmethod,
@@ -469,7 +469,7 @@ class base {
         }
 
         $tokenrec = new \stdClass;
-        $tokenrec->azureb2cfixuniqid = $azureb2cfixniqid;
+        $tokenrec->azureb2cfixuniqid = $azureb2cfixuniqid;
         $tokenrec->username = $username;
         $tokenrec->userid = $userid;
         $tokenrec->azureb2cfixusername = $azureb2cfixsername;
