@@ -61,8 +61,8 @@ $configdesc = new lang_string('cfg_tokenendpoint_desc', 'auth_azureb2cfix');
 $configdefault = 'https://tenantname.b2clogin.com/common/oauth2/token?p=signinandsignup_policy_name';
 $settings->add(new admin_setting_configtext('auth_azureb2cfix/tokenendpoint', $configkey, $configdesc, $configdefault, PARAM_TEXT));
 
-$configkey = new lang_string('cfg_azureb2cfixresource_key', 'auth_azureb2cfix);
-$configdesc = new lang_string('cfg_azureb2cfixresource_desc', 'auth_azureb2cfix);
+$configkey = new lang_string('cfg_azureb2cfixresource_key', 'auth_azureb2cfix');
+$configdesc = new lang_string('cfg_azureb2cfixresource_desc', 'auth_azureb2cfix');
 $configdefault = 'https://graph.windows.net';
 $settings->add(new admin_setting_configtext('auth_azureb2cfix/azureb2cfixesource', $configkey, $configdesc, $configdefault, PARAM_TEXT));
 
