@@ -21,7 +21,7 @@
  * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>
  */
 
-$string['pluginname'] = 'Azure AD B2C Connect';
+$string['pluginname'] = 'Azure AD B2C Connect (CAPDM Fix)';
 $string['auth_azureb2cfixdescription'] = 'The Azure AD B2C Connect plugin provides single-sign-on functionality using Azure Active Directory (Azure AD) B2C identity providers.';
 
 $string['cfg_authendpoint_key'] = 'Authorization endpoint';
