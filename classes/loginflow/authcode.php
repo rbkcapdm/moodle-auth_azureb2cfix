@@ -16,9 +16,9 @@
 
 /**
  * @package auth_azureb2cfix
- * @author Gopal Sharma <gopalsharma66@gmail.com>, Richard Kirby <rbk@capdm.com>
+ * @author Gopal Sharma <gopalsharma66@gmail.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>, 2025 Richard Kirby <rbk@capdm.com>
+ * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>
  */
 
 namespace auth_azureb2cfix\loginflow;
@@ -42,7 +42,7 @@ class authcode extends \auth_azureb2cfix\loginflow\base {
         }
 
         if (!empty($this->config->customicon)) {
-            $icon = new \pix_icon('0/customicon', get_string('pluginname', 'auth_azureb2cfix'), 'auth_azureb2cfix);
+            $icon = new \pix_icon('0/customicon', get_string('pluginname', 'auth_azureb2cfix'), 'auth_azureb2cfix');
         } else {
             $icon = (!empty($this->config->icon)) ? $this->config->icon : 'auth_azureb2cfix:o365';
             $icon = explode(':', $icon);
@@ -78,7 +78,7 @@ class authcode extends \auth_azureb2cfix\loginflow\base {
         $val = trim($val);
         $valclean = preg_replace('/[^A-Za-z0-9\_\-\.\+\/\=]/i', '', $val);
         if ($valclean !== $val) {
-            \auth_azureb2cfix\utils::debug('Authorization error.', 'authcode::cleanazureb2cfixaram', $name);
+            \auth_azureb2cfix\utils::debug('Authorization error.', 'authcode::cleanazureb2cfixparam', $name);
             throw new \moodle_exception('errorauthgeneral', 'auth_azureb2cfix');
         }
         return $valclean;
@@ -181,12 +181,12 @@ class authcode extends \auth_azureb2cfix\loginflow\base {
             } else if (strstr( $authparams['error_description'], 'AADB2C90118' )){
                 //AADB2C90118: The user has forgotten their password.
                 $lang = current_language();
-                $url = get_config('auth_azureb2cfix', 'resetpassendpoint')."&client_id=". get_config('auth_azureb2cfix, 'clientid')."&nonce=defaultNonce&redirect_uri=". $CFG->wwwroot."/auth/azureb2cfix&scope=openid&response_type=code&prompt=login&ui_locales=$lang";
+                $url = get_config('auth_azureb2cfix', 'resetpassendpoint')."&client_id=". get_config('auth_azureb2cfix', 'clientid')."&nonce=defaultNonce&redirect_uri=". $CFG->wwwroot."/auth/azureb2cfix/&scope=openid&response_type=code&prompt=login&ui_locales=$lang";
                 redirect($url);
             } else if (strstr($authparams['error_description'], 'AADB2C90075')) {
-                // RBK Session timeout issue on SSO side?
-                // Bounce back to main page???
-                redirect(new \moodle_url('/'));
+	        // RBK Session timeout issue on SSO side?
+		// Bounce back to main page???
+		redirect(new \moodle_url('/'));
             
             } else {
                 \auth_azureb2cfix\utils::debug('Authorization error.', 'authcode::handleauthresponse', $authparams);
@@ -223,6 +223,9 @@ class authcode extends \auth_azureb2cfix\loginflow\base {
         // Get token from auth code.
         $client = $this->get_azureb2cfixclient();
         $tokenparams = $client->tokenrequest($authparams['code']);
+//\auth_azureb2cfix\utils::debug($errstr, 'handleauthresponse', print_r($tokenparams, false));
+//throw new \moodle_exception('errorrestricted', 'auth_azureb2cfix');
+
         if (!isset($tokenparams['id_token'])) {
             throw new \moodle_exception('errorauthnoidtoken', 'auth_azureb2cfix');
         }
@@ -436,30 +439,30 @@ class authcode extends \auth_azureb2cfix\loginflow\base {
         if (!empty($tokenrec)) {
             // Already connected user.
 
-            if (empty($tokenrec->userid)) {
-                // Existing token record, but missing the user ID.
-                $user = $DB->get_record('user', ['username' => $tokenrec->username]);
+	    if (empty($tokenrec->userid)) {
+	        // Existing token record, but missing the user ID.
+		$user = $DB->get_record('user', ['username' => $tokenrec->username]);
 
                 if (empty($user)) {
-                    // Token exists, but it doesn't have a valid username.
-                    // In this case, delete the token, and try to process login again.
-                    $DB->delete_records('auth_azureb2cfix_token', ['id' => $tokenrec->id]);
-                    return $this->handlelogin($azureb2cfixuniqid, $authparams, $tokenparams, $idtoken);
-                }
-                $tokenrec->userid = $user->id;
-                $DB->update_record('auth_azureb2cfix_token', $tokenrec);
+		   // Token exists, but it doesn't have a valid username.
+		   // In this case, delete the token, and try to process login again.
+		   $DB->delete_records('auth_azureb2cfix_token', ['id' => $tokenrec->id]);
+		   return $this->handlelogin($azureb2cfixuniqid, $authparams, $tokenparams, $idtoken);
+		}
+		$tokenrec->userid = $user->id;
+		$DB->update_record('auth_azureb2cfix_token', $tokenrec);
             } else {
-                // Existing token with a user ID.
+	        // Existing token with a user ID.
                 $user = $DB->get_record('user', ['id' => $tokenrec->userid]);
                 if (empty($user)) {
-                    $failurereason = AUTH_LOGIN_NOUSER;
-                    $eventdata = ['other' => ['username' => $tokenrec->username, 'reason' => $failurereason]];
-                    $event = \core\event\user_login_failed::create($eventdata);
-                    $event->trigger();
-                    // Token is invalid, delete it.
-                    $DB->delete_records('auth_azureb2cfix_token', ['id' => $tokenrec->id]);
-                    return $this->handlelogin($azureb2cfixuniqud, $authparams, $tokenparams, $idtoken);
-                }
+		    $failurereason = AUTH_LOGIN_NOUSER;
+		    $eventdata = [ 'other' => ['username' => $tokenrec->username, 'reason' => $failurereason]];
+		    $event = \core\event\user_login_failed::create($eventdata);
+		    $event->trigger();
+		    // Token is invalid, delete it.
+		    $DB->delete_records('auth_azureb2cfix_token', ['id' => $tokenrec->id]);
+		    return $this->handlelogin($azureb2cfixuniqud, $authparams, $tokenparams, $idtoken);
+		}
             }
             $username = $user->username;
             $this->updatetoken($tokenrec->id, $authparams, $tokenparams);
@@ -505,19 +508,19 @@ class authcode extends \auth_azureb2cfix\loginflow\base {
                 if (empty($CFG->authpreventaccountcreation)) {
                     if (!$CFG->allowaccountssameemail) {
                         $info = $this->get_userinfo($username);
-                        // RBK See if an existing record exists with the same
-                        // email, and use that instead
-                        $count = $DB->count_records('user', array('email' => $info['email'], 'deleted' => 0));
-                        if ($count == 0) { // No existing user with same email
-                            $user = create_user_record($username, null, 'azureb2cfix');
-                        } else if ($count == 1) { // Exactly one
-                            $user = $DB->get_record('user', array('email' => $info['email']));
-                            debugging('Updating user ' . $user->id . ' with old username ' . $user->username . ' to ' . $username);
-                            $user->username = $username;
-                            $user->auth = 'azureb2cfix';
-                            $DB->update_record('user', $user);
-                        } else { // Multiple users with same email - not good!
-                            // Trigger login failed event.
+			// RBK See if an existing record exists with the same
+			// email, and use that instead
+			$count = $DB->count_records('user', array('email' => $info['email'], 'deleted' => 0));
+			if ($count == 0) { // No existing user with same email
+			    $user = create_user_record($username, null, 'azureb2cfix');
+			} else if ($count == 1) { // Exactly one
+			    $user = $DB->get_record('user', array('email' => $info['email']));
+			    debugging('Updating user ' . $user->id . ' with old username ' . $user->username . ' to ' . $username);
+			    $user->username = $username;
+			    $user->auth = 'azureb2cfix';
+			    $DB->update_record('user', $user);
+			} else { // Multiple users with same email - not good!
+                    	    // Trigger login failed event.
                             $failurereason = AUTH_LOGIN_FAILED;
                             $eventdata = ['other' => ['username' => $username, 'reason' => $failurereason]];
                             $event = \core\event\user_login_failed::create($eventdata);
@@ -526,7 +529,7 @@ class authcode extends \auth_azureb2cfix\loginflow\base {
                         }
                     } else {
                         $user = create_user_record($username, null, 'azureb2cfix');
-                    }
+	            }
                 } else {
                     // Trigger login failed event.
                     $failurereason = AUTH_LOGIN_NOUSER;

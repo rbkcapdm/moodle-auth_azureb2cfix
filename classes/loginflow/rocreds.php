@@ -138,11 +138,11 @@ class rocreds extends \auth_azureb2cfix\loginflow\base {
         $authparams = ['code' => ''];
 
         $azureb2cfixusername = $username;
-        $azureb2cfixtoken = $DB->get_records('auth_azureb2cfixtoken', ['username' => $username]);
+        $azureb2cfixtoken = $DB->get_records('auth_azureb2cfix_token', ['username' => $username]);
         if (!empty($azureb2cfixtoken)) {
-            $azureb2cfixtoken = array_shift($azureb2cfixoken);
-            if (!empty($azureb2cfixtoken) && !empty($azureb2cfixoken->azureb2cfixsername)) {
-                $azureb2cfixusername = $azureb2cfixoken->azureb2cfixsername;
+            $azureb2cfixtoken = array_shift($azureb2cfixtoken);
+            if (!empty($azureb2cfixtoken) && !empty($azureb2cfixtoken->azureb2cfixusername)) {
+                $azureb2cfixusername = $azureb2cfixtoken->azureb2cfixusername;
             }
         }
 

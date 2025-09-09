@@ -31,7 +31,7 @@ global $CFG;
  * @group auth_azureb2cfix
  * @group office365
  */
-class auth_azureb2cfix_azureb2cfixlient_testcase extends \advanced_testcase {
+class auth_azureb2cfix_azureb2cfixclient_testcase extends \advanced_testcase {
     /**
      * Perform setup before every test. This tells Moodle's phpunit to reset the database after every test.
      */
@@ -45,7 +45,7 @@ class auth_azureb2cfix_azureb2cfixlient_testcase extends \advanced_testcase {
      */
     public function test_creds_getters_and_setters() {
         $httpclient = new \auth_azureb2cfix\tests\mockhttpclient();
-        $client = new \auth_azureb2cfix\tests\mockazureb2cfixlient($httpclient);
+        $client = new \auth_azureb2cfix\tests\mockazureb2cfixclient($httpclient);
 
         $this->assertNull($client->get_clientid());
         $this->assertNull($client->get_clientsecret());
@@ -110,7 +110,7 @@ class auth_azureb2cfix_azureb2cfixlient_testcase extends \advanced_testcase {
             $this->expectExceptionMessage($expectedexception[1]);
         }
         $httpclient = new \auth_azureb2cfix\tests\mockhttpclient();
-        $client = new \auth_azureb2cfix\tests\mockazureb2cfixlient($httpclient);
+        $client = new \auth_azureb2cfix\tests\mockazureb2cfixclient($httpclient);
         $client->setendpoints($endpoints);
 
         foreach ($endpoints as $type => $uri) {

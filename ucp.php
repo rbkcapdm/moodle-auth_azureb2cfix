@@ -29,16 +29,16 @@ require_login();
 
 $action = optional_param('action', null, PARAM_TEXT);
 
-$azureb2cfixtoken = $DB->get_record('auth_azureb2cfixtoken', ['userid' => $USER->id]);
-$azureb2cfixconnected = (!empty($azureb2cfixoken)) ? true : false;
+$azureb2cfixtoken = $DB->get_record('auth_azureb2cfix_token', ['userid' => $USER->id]);
+$azureb2cfixconnected = (!empty($azureb2cfixtoken)) ? true : false;
 
-$azureb2cfixloginconnected = ($USER->auth === 'azureb2cfix) ? true : false;
+$azureb2cfixloginconnected = ($USER->auth === 'azureb2cfix') ? true : false;
 
 if (!empty($action)) {
     if ($action === 'connectlogin' && $azureb2cfixloginconnected === false) {
         // Use authorization request login flow to connect existing users.
         if (!is_enabled_auth('azureb2cfix')) {
-            throw new \moodle_exception('errorazureb2cfixnotenabled', 'auth_azureb2cfix);
+            throw new \moodle_exception('errorazureb2cfixnotenabled', 'auth_azureb2cfix');
         }
         auth_azureb2cfix_connectioncapability($USER->id, 'connect', true);
         $auth = new \auth_azureb2cfix\loginflow\authcode;

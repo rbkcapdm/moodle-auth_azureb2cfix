@@ -64,11 +64,11 @@ $settings->add(new admin_setting_configtext('auth_azureb2cfix/tokenendpoint', $c
 $configkey = new lang_string('cfg_azureb2cfixresource_key', 'auth_azureb2cfix');
 $configdesc = new lang_string('cfg_azureb2cfixresource_desc', 'auth_azureb2cfix');
 $configdefault = 'https://graph.windows.net';
-$settings->add(new admin_setting_configtext('auth_azureb2cfix/azureb2cfixesource', $configkey, $configdesc, $configdefault, PARAM_TEXT));
+$settings->add(new admin_setting_configtext('auth_azureb2cfix/azureb2cfixresource', $configkey, $configdesc, $configdefault, PARAM_TEXT));
 
 $configkey = new lang_string('cfg_redirecturi_key', 'auth_azureb2cfix');
 $configdesc = new lang_string('cfg_redirecturi_desc', 'auth_azureb2cfix');
-$settings->add(new \auth_azureb2cfix\form\adminsetting\redirecturi('auth_azureb2cfixredirecturi', $configkey, $configdesc));
+$settings->add(new \auth_azureb2cfix\form\adminsetting\redirecturi('auth_azureb2cfix/redirecturi', $configkey, $configdesc));
 
 $configkey = new lang_string('cfg_autoappend_key', 'auth_azureb2cfix');
 $configdesc = new lang_string('cfg_autoappend_desc', 'auth_azureb2cfix');
@@ -83,7 +83,7 @@ $settings->add(new admin_setting_configtext('auth_azureb2cfix/domainhint', $conf
 $configkey = new lang_string('cfg_loginflow_key', 'auth_azureb2cfix');
 $configdesc = '';
 $configdefault = 'authcode';
-$settings->add(new \auth_azureb2cfix\form\adminsetting\loginflow('auth_azureb2cfixloginflow', $configkey, $configdesc, $configdefault));
+$settings->add(new \auth_azureb2cfix\form\adminsetting\loginflow('auth_azureb2cfix/loginflow', $configkey, $configdesc, $configdefault));
 
 $configkey = new lang_string('cfg_userrestrictions_key', 'auth_azureb2cfix');
 $configdesc = new lang_string('cfg_userrestrictions_desc', 'auth_azureb2cfix');
@@ -174,7 +174,7 @@ $icons = [
         'component' => 'moodle',
     ],
 ];
-$settings->add(new \auth_azureb2cfix\form\adminsetting\iconselect('auth_azureb2cfixicon', $configkey, $configdesc, $configdefault, $icons));
+$settings->add(new \auth_azureb2cfix\form\adminsetting\iconselect('auth_azureb2cfix/icon', $configkey, $configdesc, $configdefault, $icons));
 
 $configkey = new lang_string('cfg_customicon_key', 'auth_azureb2cfix');
 $configdesc = new lang_string('cfg_customicon_desc', 'auth_azureb2cfix');

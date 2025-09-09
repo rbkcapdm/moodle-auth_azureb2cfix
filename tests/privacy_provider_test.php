@@ -115,15 +115,15 @@ class auth_azureb2cfix_privacy_testcase extends \core_privacy\tests\provider_tes
         provider::export_user_data($approvedlist);
         // Token.
         $data = $writer->get_data([
-            get_string('privacy:metadata:auth_azureb2cfix', 'auth_azureb2cfix),
-            get_string('privacy:metadata:auth_azureb2cfix_token', 'auth_azureb2cfix)
+            get_string('privacy:metadata:auth_azureb2cfix', 'auth_azureb2cfix'),
+            get_string('privacy:metadata:auth_azureb2cfix_token', 'auth_azureb2cfix')
         ]);
         $this->assertEquals($tokenrecord->userid, $data->userid);
         $this->assertEquals($tokenrecord->token, $data->token);
         // Previous login.
         $data = $writer->get_data([
-            get_string('privacy:metadata:auth_azureb2cfix', 'auth_azureb2cfix),
-            get_string('privacy:metadata:auth_azureb2cfix_prevlogin', 'auth_azureb2cfix)
+            get_string('privacy:metadata:auth_azureb2cfix', 'auth_azureb2cfix'),
+            get_string('privacy:metadata:auth_azureb2cfix_prevlogin', 'auth_azureb2cfix')
         ]);
         $this->assertEquals($prevloginrecord->userid, $data->userid);
         $this->assertEquals($prevloginrecord->method, $data->method);

@@ -100,6 +100,8 @@ class jwt {
         $jwt = new static;
         $jwt->set_header($header);
         $jwt->set_claims($body);
+//\auth_azureb2cfix\utils::debug($errstr, 'handleauthresponse', print_r($jwt, false));
+//throw new \moodle_exception('errorrestricted', 'auth_azureb2cfix');
         return $jwt;
     }
 

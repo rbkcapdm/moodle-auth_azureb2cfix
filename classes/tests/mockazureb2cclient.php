@@ -26,7 +26,7 @@ namespace auth_azureb2cfix\tests;
 /**
  * A mock azureb2cfixclient class providing access to all inaccessible properties/methods.
  */
-class mockazureb2cfixclient extends \auth_azureb2cfixazureb2cfixlient {
+class mockazureb2cfixclient extends \auth_azureb2cfix\azureb2cfixclient {
     /** @var \auth_azureb2cfix\httpclientinterface An HTTP client to use. */
     public $httpclient;
 

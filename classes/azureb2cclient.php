@@ -16,9 +16,9 @@
 
 /**
  * @package auth_azureb2cfix
- * @author Gopal Sharma <gopalsharma66@gmail.com>, Richard Kirby <rbk@capdm.com>
+ * @author Gopal Sharma <gopalsharma66@gmail.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>, 2025 Richard Kirby <rbk@capdm.com>
+ * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>
  */
 
 namespace auth_azureb2cfix;
@@ -42,7 +42,6 @@ class azureb2cfixclient {
     /** @var array Array of endpoints. */
     protected $endpoints = [];
 
-    /** RBK Added for cancelling warning. */
     /** @var string Some resource URI. */
     protected $resource;
 
@@ -113,7 +112,7 @@ class azureb2cfixclient {
     public function setendpoints($endpoints) {
         foreach ($endpoints as $type => $uri) {
             if (clean_param($uri, PARAM_URL) !== $uri) {
-                throw new \moodle_exception('errorazureb2cfixclientinvalidendpoint', 'auth_azureb2cfix);
+                throw new \moodle_exception('errorazureb2cfixclientinvalidendpoint', 'auth_azureb2cfix');
             }
             $this->endpoints[$type] = $uri;
         }
@@ -186,11 +185,11 @@ class azureb2cfixclient {
     public function authrequest($promptlogin = false, array $stateparams = array(), array $extraparams = array()) {
         global $DB;
         if (empty($this->clientid)) {
-            throw new \moodle_exception('errorazureb2cfixclientnocreds', 'auth_azureb2cfix);
+            throw new \moodle_exception('errorazureb2cfixclientnocreds', 'auth_azureb2cfix');
         }
 
         if (empty($this->endpoints['auth'])) {
-            throw new \moodle_exception('errorazureb2cfixclientnoauthendpoint', 'auth_azureb2cfix);
+            throw new \moodle_exception('errorazureb2cfixclientnoauthendpoint', 'auth_azureb2cfix');
         }
 
         $params = $this->getauthrequestparams($promptlogin, $stateparams, $extraparams);
@@ -207,11 +206,11 @@ class azureb2cfixclient {
      */
     public function rocredsrequest($username, $password) {
         if (empty($this->endpoints['token'])) {
-            throw new \moodle_exception('errorazureb2cfixclientnotokenendpoint', 'auth_azureb2cfix);
+            throw new \moodle_exception('errorazureb2cfixclientnotokenendpoint', 'auth_azureb2cfix');
         }
 
         if (strpos($this->endpoints['token'], 'https://') !== 0) {
-            throw new \moodle_exception('errorazureb2cfixclientinsecuretokenendpoint', 'auth_azureb2cfix);
+            throw new \moodle_exception('errorazureb2cfixclientinsecuretokenendpoint', 'auth_azureb2cfix');
         }
 
         $params = [
@@ -228,7 +227,7 @@ class azureb2cfixclient {
             $returned = $this->httpclient->post($this->endpoints['token'], $params);
             return \auth_azureb2cfix\utils::process_json_response($returned, ['token_type' => null, 'id_token' => null]);
         } catch (\Exception $e) {
-            \auth_azureb2cfix\utils::debug('Error in rocredsrequest request', 'azureb2cfixlient::rocredsrequest', $e->getMessage());
+            \auth_azureb2cfix\utils::debug('Error in rocredsrequest request', 'azureb2cfixclient::rocredsrequest', $e->getMessage());
             return false;
         }
     }
@@ -242,7 +241,7 @@ class azureb2cfixclient {
      */
     public function tokenrequest($code) {
         if (empty($this->endpoints['token'])) {
-            throw new \moodle_exception('errorazureb2cfixclientnotokenendpoint', 'auth_azureb2cfix);
+            throw new \moodle_exception('errorazureb2cfixclientnotokenendpoint', 'auth_azureb2cfix');
         }
 
         

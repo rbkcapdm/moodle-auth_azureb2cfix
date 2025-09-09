@@ -229,8 +229,8 @@ class base {
             // Check to see if the user has a username created by azureb2cfix, or a self-created username.
             // azureb2cfix-created usernames are usually very verbose, so we'll allow them to choose a sensible one.
             // Otherwise, keep their existing username.
-            $azureb2cfixtoken = $DB->get_record('auth_azureb2cfixtoken', ['userid' => $userrec->id]);
-            $ccun = (isset($azureb2cfixtoken->azureb2cfixuniqid) && strtolower($azureb2cfixoken->azureb2cfixuniqid) === $userrec->username) ? true : false;
+            $azureb2cfixtoken = $DB->get_record('auth_azureb2cfix_token', ['userid' => $userrec->id]);
+            $ccun = (isset($azureb2cfixtoken->azureb2cfixuniqid) && strtolower($azureb2cfixtoken->azureb2cfixuniqid) === $userrec->username) ? true : false;
             $customdata = [
                 'canchooseusername' => $ccun,
                 'prevmethod' => $prevauthmethod,
@@ -332,7 +332,7 @@ class base {
     /**
      * Construct the Azure AD B2C Connect client.
      *
-     * @return \auth_azureb2cfix\azureb2cfixlient The constructed client.
+     * @return \auth_azureb2cfix\azureb2cfixclient The constructed client.
      */
     protected function get_azureb2cfixclient() {
         global $CFG;
@@ -350,9 +350,9 @@ class base {
         $clientsecret = (isset($this->config->clientsecret)) ? $this->config->clientsecret : null;
         $redirecturi = (!empty($CFG->loginhttps)) ? str_replace('http://', 'https://', $CFG->wwwroot) : $CFG->wwwroot;
         $redirecturi .= '/auth/azureb2cfix/';
-        $resource = (isset($this->config->azureb2cfixresource)) ? $this->config->azureb2cfixesource : null;
+        $resource = (isset($this->config->azureb2cfixresource)) ? $this->config->azureb2cfixresource : null;
 
-        $client = new \auth_azureb2cfix\azureb2cfixlient($this->httpclient);
+        $client = new \auth_azureb2cfix\azureb2cfixclient($this->httpclient);
         $client->setcreds($clientid, $clientsecret, $redirecturi, $resource);
 
         $client->setendpoints(['auth' => $this->config->authendpoint, 'token' => $this->config->tokenendpoint]);
@@ -369,6 +369,8 @@ class base {
     protected function process_idtoken($idtoken, $orignonce = '') {
         // Decode and verify idtoken.
         $idtoken = \auth_azureb2cfix\jwt::instance_from_encoded($idtoken);
+//\auth_azureb2cfix\utils::debug($errstr, 'handleauthresponse', print_r($idtoken, false));
+//throw new \moodle_exception('errorrestricted', 'auth_azureb2cfix');
         $sub = $idtoken->claim('sub');
         if (empty($sub)) {
             \auth_azureb2cfix\utils::debug('Invalid idtoken', 'base::process_idtoken', $idtoken);
@@ -454,7 +456,7 @@ class base {
      * @param \auth_azureb2cfix\jwt $idtoken A JWT object representing the received id_token.
      * @return \stdClass The created token database record.
      */
-    protected function createtoken($azureb2cfixuniqid, $username, $authparams, $tokenparams, \auth_azureb2cfixjwt $idtoken, $userid = 0) {
+    protected function createtoken($azureb2cfixuniqid, $username, $authparams, $tokenparams, \auth_azureb2cfix\jwt $idtoken, $userid = 0) {
         global $DB;
 
         // Determine remote username. Use 'upn' if available (Azure-specific), or fall back to standard 'sub'.
@@ -472,7 +474,7 @@ class base {
         $tokenrec->azureb2cfixuniqid = $azureb2cfixuniqid;
         $tokenrec->username = $username;
         $tokenrec->userid = $userid;
-        $tokenrec->azureb2cfixusername = $azureb2cfixsername;
+        $tokenrec->azureb2cfixusername = $azureb2cfixusername;
         $tokenrec->scope = !empty($tokenparams['scope']) ? $tokenparams['scope'] : 'openid profile email';
         $tokenrec->resource = !empty($tokenparams['resource']) ? $tokenparams['resource'] : $this->config->azureb2cfixresource;
         $tokenrec->authcode = $authparams['code'];

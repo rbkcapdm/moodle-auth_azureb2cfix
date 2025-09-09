@@ -16,13 +16,12 @@
 
 /**
  * @package auth_azureb2cfix
- * @author Gopal Sharma <gopalsharma66@gmail.com>, Richard Kirby <rbk@capdm.com>
+ * @author Gopal Sharma <gopalsharma66@gmail.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>, 2025 Richard Kirby <rbk@capdm.com>
+ * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>
  */
 
-// RBK Small addition to pluginname to differentiate.
-$string['pluginname'] = 'Azure AD B2C Connect (CAPDM Fix)';
+$string['pluginname'] = 'Azure AD B2C Connect';
 $string['auth_azureb2cfixdescription'] = 'The Azure AD B2C Connect plugin provides single-sign-on functionality using Azure Active Directory (Azure AD) B2C identity providers.';
 
 $string['cfg_authendpoint_key'] = 'Authorization endpoint';
@@ -143,10 +142,10 @@ $string['privacy:metadata:auth_azureb2cfix_prevlogin:userid'] = 'The ID of the M
 $string['privacy:metadata:auth_azureb2cfix_prevlogin:method'] = 'The previous login method';
 $string['privacy:metadata:auth_azureb2cfix_prevlogin:password'] = 'The previous (encrypted) user password field.';
 $string['privacy:metadata:auth_azureb2cfix_token'] = 'Azure AD B2C Connect tokens';
-$string['privacy:metadata:auth_azureb2cfix_token:azureb2cfixuniqid'] = 'The azureb2cfixunique user identifier.';
+$string['privacy:metadata:auth_azureb2cfix_token:azureb2cfixuniqid'] = 'The azureb2cfix unique user identifier.';
 $string['privacy:metadata:auth_azureb2cfix_token:username'] = 'The username of the Moodle user';
 $string['privacy:metadata:auth_azureb2cfix_token:userid'] = 'The user ID of the Moodle user';
-$string['privacy:metadata:auth_azureb2cfix_token:azureb2cfixsername'] = 'The username of the azureb2cfixuser';
+$string['privacy:metadata:auth_azureb2cfix_token:azureb2cfixusername'] = 'The username of the azureb2cfix user';
 $string['privacy:metadata:auth_azureb2cfix_token:scope'] = 'The scope of the token';
 $string['privacy:metadata:auth_azureb2cfix_token:resource'] = 'The resource of the token';
 $string['privacy:metadata:auth_azureb2cfix_token:authcode'] = 'The auth code for the token';

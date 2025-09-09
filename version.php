@@ -16,9 +16,9 @@
 
 /**
  * @package auth_azureb2cfix
- * @author Gopal Sharma <gopalsharma66@gmail.com>, Richard Kirby <rbk@capdm.com>
+ * @author Gopal Sharma <gopalsharma66@gmail.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>, 2025 Richard KIrby <rbk@capdm.com>
+ * @copyright (C) 2020 Gopal Sharma <gopalsharma66@gmail.com>
  */
 
 defined('MOODLE_INTERNAL') || die();
