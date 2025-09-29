@@ -23,7 +23,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2025090800;  // The current plugin version (Date: YYYYMMDDXX).
+$plugin->version = 2025090801;  // The current plugin version (Date: YYYYMMDDXX).
 $plugin->requires = 2018051700;
 $plugin->release = '4.1.0.1';
 $plugin->component = 'auth_azureb2cfix';
